@@ -58,7 +58,7 @@ export default function CrystalField() {
   return (
     <Canvas
       camera={{ position: [0, 0, 8], fov: 45 }}
-      className="!absolute inset-0"
+      className="absolute! inset-0"
       gl={{ antialias: true }}
     >
       <ambientLight intensity={0.4} />
