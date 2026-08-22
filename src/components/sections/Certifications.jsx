@@ -1,33 +1,75 @@
-import { Award } from "lucide-react";
+import { useState } from "react";
+import { Award, FileText, ExternalLink } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
+import Modal from "../ui/Modal";
 import { certifications } from "../../data/certifications";
 
 export default function Certifications() {
+  const [openCert, setOpenCert] = useState(null);
+
+  const handleClick = (e, cert) => {
+    if (cert.type === "credly") return;
+    e.preventDefault();
+    setOpenCert(cert);
+  };
+
   return (
-    <section id="certificaciones" className="max-w-[1180px] mx-auto px-10 py-28">
+    <section id="certificaciones" className="max-w-295 mx-auto px-10 py-28">
       <SectionHeader tag="SYS.04" title="Certificaciones" />
-      <div className="grid gap-4.5 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
+
+      <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
         {certifications.map((cert) => (
-          <div
+          <a
             key={cert.id}
-            className="flex gap-4 items-start bg-panel border border-white/10 rounded-2xl p-5 transition-all hover:border-accent/50 hover:-translate-y-1"
+            href={cert.file}
+            target={cert.type === "credly" ? "_blank" : undefined}
+            rel="noopener noreferrer"
+            onClick={(e) => handleClick(e, cert)}
+            className="group relative flex gap-3.5 items-start bg-panel border border-white/10 rounded-xl p-4 transition-all duration-300 hover:z-30 hover:border-accent/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10 cursor-pointer"
           >
-            <div className="flex-shrink-0 w-10.5 h-10.5 rounded-xl bg-accent/15 text-accent-light flex items-center justify-center">
-              <Award size={18} />
-            </div>
-            <div>
-              <h4 className="font-display text-[15.5px] font-semibold text-paper mb-1">{cert.title}</h4>
-              <div className="text-[13px] text-muted mb-2">{cert.issuer}</div>
-              <div className="flex justify-between items-center gap-3">
-                <span className="font-mono text-[10.5px] text-muted">{cert.date}</span>
-                <a href={cert.link} className="font-mono text-[11px] text-accent-light hover:underline">
-                  Ver credencial →
-                </a>
+            {cert.thumbnail ? (
+              <img
+                src={cert.thumbnail}
+                alt=""
+                className="relative z-10 shrink-0 w-14 h-14 object-contain transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-[3] group-hover:-translate-y-4 group-hover:rotate-[-5deg] group-hover:drop-shadow-[0_25px_45px_rgba(0,0,0,0.65)]"
+              />
+            ) : (
+              <div className="shrink-0 w-9 h-9 rounded-lg bg-accent/15 text-accent-light flex items-center justify-center">
+                {cert.type === "pdf" ? <FileText size={16} /> : <Award size={16} />}
+              </div>
+            )}
+            <div className="min-w-0">
+              <h4 className="font-display text-sm font-semibold text-paper mb-0.5 truncate">{cert.title}</h4>
+              <div className="text-xs text-muted mb-1.5 truncate">{cert.issuer}</div>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[10px] text-muted">{cert.date}</span>
+                <span className="font-mono text-[10.5px] text-accent-light flex items-center gap-1">
+                  {cert.type === "pdf" ? "Ver PDF" : cert.type === "credly" ? "Ver credencial" : "Ver imagen"}
+                  <ExternalLink size={10} />
+                </span>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
+
+      {openCert && (
+        <Modal onClose={() => setOpenCert(null)}>
+          {openCert.type === "image" ? (
+            <img
+              src={openCert.file}
+              alt={openCert.title}
+              className="max-h-[75vh] w-auto mx-auto rounded-lg"
+            />
+          ) : (
+            <iframe
+              src={openCert.file}
+              title={openCert.title}
+              className="w-full h-[75vh] rounded-lg"
+            />
+          )}
+        </Modal>
+      )}
     </section>
   );
 }
