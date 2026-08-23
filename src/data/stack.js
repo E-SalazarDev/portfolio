@@ -1,6 +1,35 @@
+
 export const stack = [
-  { category: "FRONTEND", items: ["React", "JavaScript", "CSS"] },
-  { category: "BACKEND", items: ["Python", "Java", "APIs REST"] },
-  { category: "IA / ML", items: ["Modelos ML", "NLP", "Visión"] },
-  { category: "HERRAMIENTAS", items: ["Git", "Maven", "SQL"] },
+  {
+    category: "FRONTEND",
+    items: [
+      { name: "React", brand: "react" },
+      { name: "JavaScript", brand: "javascript" },
+      { name: "CSS", brand: "css3" },
+    ],
+  },
+  {
+    category: "BACKEND",
+    items: [
+      { name: "Python", brand: "python" },
+      { name: "Java", lucide: "coffee" }, 
+      { name: "APIs REST", lucide: "globe" },
+    ],
+  },
+  {
+    category: "IA / ML",
+    items: [
+      { name: "Modelos ML", lucide: "brain-circuit" },
+      { name: "NLP", lucide: "message-square-text" },
+      { name: "Visión", lucide: "eye" },
+    ],
+  },
+  {
+    category: "HERRAMIENTAS",
+    items: [
+      { name: "Git", brand: "git" },
+      { name: "Maven", brand: "apachemaven" },
+      { name: "SQL", lucide: "database" },
+    ],
+  },
 ];
