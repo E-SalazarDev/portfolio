@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 export default function Contact() {
   return (
     <>
-      <section id="contacto" className="max-w-295 mx-auto px-10 py-28">
+      <section id="contacto" className="max-w-360 mx-auto px-10 py-28">
         <div className="text-center bg-linear-to-br from-panel to-panel2 border border-white/10 rounded-[20px] px-12 py-16">
           <span className="inline-flex items-center gap-2 text-xs tracking-widest text-accent-light border border-white/10 bg-accent/6 rounded-full px-4 py-1.5 mb-5">
             ◆ Transmisión abierta
