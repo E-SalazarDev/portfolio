@@ -5,12 +5,14 @@ import Experience from "./components/sections/Experience";
 import Certifications from "./components/sections/Certifications";
 import Stack from "./components/sections/Stack";
 import Contact from "./components/sections/Contact";
+import About from "./components/sections/About";
 
 export default function App() {
   return (
     <div className="bg-ink min-h-screen">
       <Nav />
       <Hero />
+      {/* <About /> */}
       <Projects />
       <Experience />
       <Certifications />
