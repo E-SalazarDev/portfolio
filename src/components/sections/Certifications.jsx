@@ -4,7 +4,6 @@ import SectionHeader from "../ui/SectionHeader";
 import Modal from "../ui/Modal";
 import { certifications } from "../../data/certifications";
 
-
 function groupByIssuer(list) {
   const order = [];
   const groups = {};
@@ -31,6 +30,7 @@ function CertCard({ cert, onOpen }) {
       target={cert.type === "credly" ? "_blank" : undefined}
       rel="noopener noreferrer"
       onClick={handleClick}
+      title={cert.title}
       className="relative flex gap-3.5 items-start bg-panel border border-white/10 rounded-xl p-4 transition-all duration-300 hover:z-30 hover:border-accent/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10 cursor-pointer"
     >
       {cert.thumbnail ? (
@@ -45,7 +45,9 @@ function CertCard({ cert, onOpen }) {
         </div>
       )}
       <div className="min-w-0">
-        <h4 className="font-display text-sm font-semibold text-paper mb-0.5 truncate">{cert.title}</h4>
+        <h4 className="font-display text-sm font-semibold text-paper mb-0.5 leading-snug line-clamp-2">
+          {cert.title}
+        </h4>
         <div className="text-xs text-muted mb-1.5 truncate">{cert.issuer}</div>
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] text-muted">{cert.date}</span>
