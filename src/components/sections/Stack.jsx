@@ -1,13 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { Database } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
-import StackCrystals from "./StackCrystals";
+import StackParticles from "./StackParticles";
 import { stack } from "../../data/stack";
-
 
 const INLINE_ICONS = {
   oracle: Database,
 };
+
+const MAX_TILT = 10; // grados — mantenerlo sutil, no una tarjeta girando 30°
 
 function buildSources(item) {
   const sources = [];
@@ -25,6 +26,7 @@ function StackItem({ item }) {
   const [attempt, setAttempt] = useState(0);
   const src = sources[attempt];
   const InlineIcon = item.inline ? INLINE_ICONS[item.inline] : null;
+  const cardRef = useRef(null);
 
   const handleError = () => {
     if (attempt < sources.length - 1) setAttempt((a) => a + 1);
@@ -32,35 +34,76 @@ function StackItem({ item }) {
   };
 
   const exhausted = attempt >= sources.length;
+  const color = `#${item.color || "8B5CF6"}`;
+
+  // Tilt + glow por mutación directa del DOM (evita re-render en cada mousemove)
+  const handleMouseMove = useCallback((e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rotateY = (px - 0.5) * MAX_TILT * 2;
+    const rotateX = (0.5 - py) * MAX_TILT * 2;
+    el.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) translateZ(6px)`;
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transform = "perspective(700px) rotateX(0deg) rotateY(0deg) translateY(0) translateZ(0)";
+  }, []);
 
   return (
-    <div className="group flex flex-col items-center gap-3 cursor-default perspective-[600px]">
-      <div className="w-16 h-16 rounded-full bg-white/3 backdrop-blur-sm border border-white/10 flex items-center justify-center transition-colors duration-300 group-hover:border-white/25 group-hover:bg-white/6">
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="group relative flex flex-col items-center justify-center gap-4 w-full aspect-square rounded-2xl border border-white/10 bg-white/6 backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.25)] px-3 py-4 will-change-transform hover:border-white/20 hover:bg-white/10"
+      style={{
+        transformStyle: "preserve-3d",
+        transition: "transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease, background-color 300ms ease",
+      }}
+    >
+      {/* Glow radial que sigue al cursor, teñido con el color de la marca */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(140px circle at var(--mx, 50%) var(--my, 50%), ${color}55, transparent 70%)`,
+          boxShadow: `0 0 30px -6px ${color}80, inset 0 0 24px -8px ${color}40`,
+        }}
+      />
+
+      <div
+        className="relative z-10 w-16 h-16 flex items-center justify-center"
+        style={{ transform: "translateZ(20px)" }}
+      >
         {InlineIcon ? (
-          <InlineIcon
-            size={30}
-            style={{ color: `#${item.color}` }}
-            className="transition-transform duration-300 ease-out group-hover:transform-[rotateY(-18deg)_rotateX(10deg)_scale(1.25)]"
-          />
+          <InlineIcon size={40 * (item.scale || 1)} style={{ color }} />
         ) : src && !exhausted ? (
           <img
             key={src}
             src={src}
             alt=""
-            className="w-8 h-8 object-contain transition-transform duration-300 ease-out group-hover:transform-[rotateY(-18deg)_rotateX(10deg)_scale(1.25)]"
-            style={{ filter: "drop-shadow(0 0 0 transparent)" }}
-            onMouseEnter={(e) => (e.currentTarget.style.filter = `drop-shadow(0 6px 12px #${item.color || "8B5CF6"}90)`)}
-            onMouseLeave={(e) => (e.currentTarget.style.filter = "drop-shadow(0 0 0 transparent)")}
+            className="object-contain"
+            style={{ width: `${2.75 * (item.scale || 1)}rem`, height: `${2.75 * (item.scale || 1)}rem` }}
             onError={handleError}
           />
         ) : (
           <span
-            className="w-4 h-4 rounded-full transition-transform duration-300 group-hover:scale-150"
-            style={{ backgroundColor: `#${item.color}`, boxShadow: `0 0 10px #${item.color}99` }}
+            className="w-5 h-5 rounded-full"
+            style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}99` }}
           />
         )}
       </div>
-      <span className="text-[11.5px] text-muted text-center leading-tight transition-colors duration-300 group-hover:text-paper whitespace-nowrap">
+
+      <span
+        className="relative z-10 text-sm font-medium text-muted text-center leading-tight transition-colors duration-300 group-hover:text-paper whitespace-nowrap"
+        style={{ transform: "translateZ(14px)" }}
+      >
         {item.name}
       </span>
     </div>
@@ -70,23 +113,27 @@ function StackItem({ item }) {
 export default function Stack() {
   return (
     <section id="stack" className="relative max-w-360 mx-auto px-10 py-28 overflow-hidden">
-
-      <div className="absolute inset-0 pointer-events-none opacity-70">
-        <StackCrystals />
+      <div className="absolute inset-0 pointer-events-none">
+        <StackParticles />
       </div>
-
       <div className="relative">
         <SectionHeader tag="SYS.05" title="Stack" />
-        <div className="flex flex-col gap-12">
-          {stack.map((group) => (
+        <div className="flex flex-col gap-14">
+          {stack.map((group, groupIndex) => (
             <div key={group.category}>
-              <div className="flex items-center gap-3 mb-7">
-                <span className="font-mono text-[11px] tracking-widest text-accent-light whitespace-nowrap">
+              <div className="flex items-baseline gap-4 mb-7">
+                <span className="font-mono text-sm font-semibold tracking-widest text-accent-light whitespace-nowrap">
+                  {String(groupIndex + 1).padStart(2, "0")}
+                </span>
+                <span className="font-mono text-sm font-semibold tracking-widest text-paper whitespace-nowrap">
                   {group.category}
                 </span>
-                <div className="flex-1 h-px bg-white/10" />
+                <div className="flex-1 h-px bg-linear-to-r from-white/10 to-transparent" />
+                <span className="font-mono text-xs text-muted whitespace-nowrap">
+                  {group.items.length} {group.items.length === 1 ? "tech" : "techs"}
+                </span>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 xl:grid-cols-8 gap-y-10 justify-items-center">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
                 {group.items.map((item) => (
                   <StackItem key={item.name} item={item} />
                 ))}
