@@ -9,7 +9,7 @@ export default {
         panel2: "#12162C",
         paper: "#EAF0FF",
         muted: "#7C87A8",
-        // cambia este bloque para probar otra paleta (turquesa, ámbar, magenta...)
+
         accent: {
           DEFAULT: "#8B5CF6",
           light: "#C7B8FF",
