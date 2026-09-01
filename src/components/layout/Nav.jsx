@@ -26,7 +26,7 @@ export default function Nav() {
     <div
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-ink/70 backdrop-blur-xl border-b border-white/6 shadow-[0_1px_0_0_rgba(255,255,255,0.04)]"
+          ? "bg-panel/80 backdrop-blur-xl border-b border-panel2 shadow-[0_1px_0_0_rgba(255,255,255,0.04)]"
           : "bg-transparent border-b border-transparent"
       }`}
     >
@@ -41,15 +41,15 @@ export default function Nav() {
           </span>
         </div>
 
-        {/* Links centrados, en cápsula translúcida */}
-        <nav className="hidden md:flex items-center gap-0.5 text-[13px] p-1 rounded-full border border-white/6 bg-white/3">
+    
+        <nav className="hidden md:flex items-center gap-0.5 text-[13px] p-1 rounded-full border border-panel2 bg-panel">
           {LINKS.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
               className={`relative px-4 py-1.5 rounded-full font-medium transition-all duration-200 ${
                 active === link.id
-                  ? "text-ink bg-paper shadow-sm"
+                  ? "text-paper bg-surface shadow-sm"
                   : "text-muted hover:text-paper"
               }`}
             >
@@ -66,6 +66,7 @@ export default function Nav() {
           >
             CV
           </a>
+          
           <a
             href="#contacto"
             className="group relative font-body text-xs font-semibold text-ink bg-linear-to-r from-paper to-white rounded-full px-5 py-2.5 overflow-hidden transition-transform hover:scale-[1.03]"
@@ -82,7 +83,7 @@ export default function Nav() {
       </div>
 
       {/* barra de progreso de scroll */}
-      <div className="h-px bg-white/4 relative">
+      <div className="h-px bg-panel2 relative">
         <div
           className="absolute top-0 left-0 h-px bg-linear-to-r from-accent to-accent-light transition-[width] duration-150"
           style={{ width: `${progress}%` }}
