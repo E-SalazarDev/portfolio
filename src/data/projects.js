@@ -1,4 +1,3 @@
-
 export const projects = [
   {
     id: "smarthouse-ai",
@@ -9,9 +8,9 @@ export const projects = [
     demoLabel: "DEMO · 1:20",
 
     media: [
-      { type: "video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", poster: "https://picsum.photos/seed/smarthouse-video/800/450" },
-      { type: "image", src: "https://picsum.photos/seed/smarthouse-1/800/450", label: "Dashboard" },
-      { type: "image", src: "https://picsum.photos/seed/smarthouse-2/800/450", label: "Comparables" },
+      { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", poster: "https://placehold.co/800x450/12162A/EAF0FF?text=SmartHouse+AI" },
+      { type: "image", src: "https://placehold.co/800x450/1C2140/C7B8FF?text=Dashboard", label: "Dashboard" },
+      { type: "image", src: "https://placehold.co/800x450/1C2140/5EA8FF?text=Comparables", label: "Comparables" },
     ],
     did: [
       "Diseñé el sistema de diseño y los componentes del dashboard",
@@ -34,8 +33,8 @@ export const projects = [
     demoLabel: "DEMO · 2:05",
 
     media: [
-      { type: "image", src: "https://picsum.photos/seed/certificados-1/800/450", label: "Generación de certificado" },
-      { type: "image", src: "https://picsum.photos/seed/certificados-2/800/450", label: "Panel de laboratorio" },
+      { type: "image", src: "https://placehold.co/800x450/12162A/EAF0FF?text=Generacion+de+certificado", label: "Generación de certificado" },
+      { type: "image", src: "https://placehold.co/800x450/1C2140/33D6A6?text=Panel+de+laboratorio", label: "Panel de laboratorio" },
     ],
     did: [
       "Rediseñé la arquitectura de una app JavaFX de laboratorio clínico",
@@ -58,7 +57,7 @@ export const projects = [
     demoLabel: "DEMO · 0:58",
 
     media: [
-      { type: "image", src: "https://picsum.photos/seed/multimodal-1/800/450", label: "Búsqueda cruzada texto-imagen" },
+      { type: "image", src: "https://placehold.co/800x450/12162A/FFC145?text=Busqueda+cruzada", label: "Búsqueda cruzada texto-imagen" },
     ],
     did: [
       "Entrené un modelo multimodal sobre un dataset de moda (Kaggle)",
