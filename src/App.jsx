@@ -1,3 +1,4 @@
+import AmbientBackground from "./components/layout/AmbientBackground";
 import Nav from "./components/layout/Nav";
 import Hero from "./components/sections/Hero";
 import Projects from "./components/sections/Projects";
@@ -9,15 +10,18 @@ import About from "./components/sections/About";
 
 export default function App() {
   return (
-    <div className="bg-ink min-h-screen">
-      <Nav />
-      <Hero />
-      {/* <About /> */}
-      <Projects />
-      <Experience />
-      <Certifications />
-      <Stack />
-      <Contact />
+    <div className="relative bg-ink min-h-screen">
+      <AmbientBackground />
+      <div className="relative z-10">
+        <Nav />
+        <Hero />
+        {/* <About /> */}
+        <Projects />
+        <Experience />
+        <Certifications />
+        <Stack />
+        <Contact />
+      </div>
     </div>
   );
 }
