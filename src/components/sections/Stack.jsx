@@ -1,7 +1,7 @@
+// src/components/sections/Stack.jsx
 import { useState, useMemo, useRef, useCallback } from "react";
 import { Database } from "lucide-react";
 import SectionHeader from "../ui/SectionHeader";
-import StackParticles from "./StackParticles";
 import { stack } from "../../data/stack";
 
 const INLINE_ICONS = {
@@ -36,7 +36,6 @@ function StackItem({ item }) {
   const exhausted = attempt >= sources.length;
   const color = `#${item.color || "8B5CF6"}`;
 
-  // Tilt + glow por mutación directa del DOM (evita re-render en cada mousemove)
   const handleMouseMove = useCallback((e) => {
     const el = cardRef.current;
     if (!el) return;
@@ -67,7 +66,6 @@ function StackItem({ item }) {
         transition: "transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease, background-color 300ms ease",
       }}
     >
-      {/* Glow radial que sigue al cursor, teñido con el color de la marca */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -112,10 +110,7 @@ function StackItem({ item }) {
 
 export default function Stack() {
   return (
-    <section id="stack" className="relative max-w-360 mx-auto px-10 py-28 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <StackParticles />
-      </div>
+    <section id="stack" className="relative max-w-360 mx-auto px-10 py-28">
       <div className="relative">
         <SectionHeader tag="SYS.05" title="Stack" />
         <div className="flex flex-col gap-14">
