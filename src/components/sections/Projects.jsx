@@ -42,7 +42,7 @@ function ProjectItem({ project, index, active, onClick }) {
     >
       <span
         aria-hidden
-        className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full transition-all duration-300"
+        className="absolute left-0 top-3 bottom-3 w-0.75 rounded-r-full transition-all duration-300"
         style={{
           background: active ? "rgb(" + accent.rgb + ")" : "transparent",
           boxShadow: active ? "0 0 12px " + accentAlpha(accent, 0.35) : "none",
@@ -126,7 +126,7 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
                 transform: isActive ? "translateY(-2px)" : "translateY(0)",
               }}
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-ink">
+              <div className="relative aspect-16/10 overflow-hidden bg-ink">
                 <img
                   src={isVideo ? item.poster : item.src}
                   alt={item.label || "Media " + (index + 1)}
