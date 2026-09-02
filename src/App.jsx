@@ -15,7 +15,7 @@ export default function App() {
       <div className="relative z-10">
         <Nav />
         <Hero />
-        {/* <About /> */}
+        <About />
         <Projects />
         <Experience />
         <Certifications />
