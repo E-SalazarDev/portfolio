@@ -3,12 +3,12 @@ export default function AmbientBackground() {
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
     
       <div
-        className="absolute -top-40 left-1/2 -translate-x-1/2 w-[1400px] h-[900px] opacity-[0.12] blur-3xl"
+        className="absolute -top-40 left-1/2 -translate-x-1/2 w-350 h-225 opacity-[0.12] blur-3xl"
         style={{ background: "radial-gradient(circle, #8B5CF6, transparent 65%)" }}
       />
      
       <div
-        className="absolute bottom-[-200px] right-[-150px] w-[900px] h-[700px] opacity-[0.08] blur-3xl"
+        className="absolute -bottom-50 -right-37.5 w-225 h-175 opacity-[0.08] blur-3xl"
         style={{ background: "radial-gradient(circle, #5EA8FF, transparent 65%)" }}
       />
     
