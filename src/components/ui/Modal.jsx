@@ -26,7 +26,7 @@ export default function Modal({ onClose, children }) {
 
       <div className="flex items-center justify-center h-full p-4 sm:p-6">
         <div
-          className="relative w-full max-w-[1200px] max-h-[92vh] bg-panel border border-panel2 rounded-2xl p-4 overflow-auto"
+          className="relative w-full max-w-300 max-h-[92vh] bg-panel border border-panel2 rounded-2xl p-4 overflow-auto"
           onClick={function (e) {
             e.stopPropagation();
           }}
