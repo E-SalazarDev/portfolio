@@ -1,14 +1,17 @@
-export const ACCENT = {
-  primary: { rgb: "139,92,246", hex: "#8B5CF6", text: "text-accent-light" }, // violeta — marca
-  secondary: { rgb: "94,168,255", hex: "#5EA8FF", text: "text-secondary" }, // azul frío
-  ai: { rgb: "51,214,166", hex: "#33D6A6", text: "text-mint" }, // mint
-  warning: { rgb: "255,193,69", hex: "#FFC145", text: "text-amber" }, // ámbar
-};
+// src/theme/tokens.js
+// Acentos rotativos usados en listas (Proyectos, Experiencia, Certificaciones).
+// Sin hex propio: todo viene de palette.js, la única fuente de color.
+import { PALETTE, RGB } from "./palette";
 
+export const ACCENT = {
+  primary:   { rgb: RGB.accent,    hex: PALETTE.accent,    text: "text-accent-light" }, // acento de marca
+  secondary: { rgb: RGB.secondary, hex: PALETTE.secondary, text: "text-secondary" },    // secundario frío
+  ai:        { rgb: RGB.mint,      hex: PALETTE.mint,      text: "text-mint" },         // mint
+  warning:   { rgb: RGB.amber,     hex: PALETTE.amber,     text: "text-amber" },        // ámbar
+};
 
 export const ROTATION = [ACCENT.primary, ACCENT.secondary, ACCENT.ai, ACCENT.warning];
 
-
 export function accentAlpha(accent, alpha) {
-  return "rgba(" + accent.rgb + "," + alpha + ")";
+  return `rgba(${accent.rgb},${alpha})`;
 }
