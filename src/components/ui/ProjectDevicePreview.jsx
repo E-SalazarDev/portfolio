@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Float, Html, OrbitControls } from "@react-three/drei";
 import { Suspense, useMemo } from "react";
+import { RGB } from "../../theme/palette";
 
 function LaptopModel({ media, mediaIndex }) {
   const current = media?.[mediaIndex];
@@ -106,14 +107,13 @@ export default function ProjectDevicePreview({
   const hasMedia = media.length > 0;
 
   return (
-    <div className="relative h-[480px] md:h-[540px] overflow-hidden rounded-[28px] bg-[#0b0c11] border border-white/[0.08]">
-      {/* Luz ambiental MUY sutil */}
+    <div className="relative h-120 md:h-135 overflow-hidden rounded-[28px] bg-[#0b0c11] border border-white/8">
+
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            "radial-gradient(circle at 50% 42%, rgba(139,92,246,0.055), transparent 55%)",
+          background: `radial-gradient(circle at 50% 42%, rgba(${RGB.accent},0.055), transparent 55%)`,
         }}
       />
 
