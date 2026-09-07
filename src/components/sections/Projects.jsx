@@ -6,6 +6,8 @@ import {
   Image as ImageIcon,
   Video,
   ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 
@@ -13,6 +15,7 @@ import SectionHeader from "../ui/SectionHeader";
 import Chip from "../ui/Chip";
 import { projects } from "../../data/projects";
 import { ROTATION, accentAlpha } from "../../theme/tokens";
+import { PALETTE, RGB } from "../../theme/palette";
 
 const STATUS_STYLES = {
   live: "bg-mint/10 text-mint",
@@ -52,7 +55,7 @@ function ProjectItem({ project, index, active, onClick }) {
       <div className="flex items-start gap-4">
         <span
           className="font-mono text-sm pt-0.5 shrink-0 transition-colors duration-300"
-          style={{ color: active ? "rgb(" + accent.rgb + ")" : "#4A4D57" }}
+          style={{ color: active ? "rgb(" + accent.rgb + ")" : `rgba(${RGB.muted},0.55)` }}
         >
           {String(index + 1).padStart(2, "0")}
         </span>
@@ -102,8 +105,10 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
     <div className="mt-5">
       <div className="flex items-center justify-between mb-4">
         <span className="font-mono text-[13px] tracking-[0.16em] uppercase text-paper">Media</span>
-        <span className="font-mono text-[13px] tracking-wide" style={{ color: accentAlpha(accent, 0.9) }}>
-          {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
+        <span
+          className="font-mono text-[13px] tracking-wide px-2 py-1 rounded-md"
+          style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.4)` }}
+        > {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
         </span>
       </div>
 
@@ -121,8 +126,8 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
               }}
               className="group relative shrink-0 w-32 sm:w-40 md:w-44 lg:w-48 rounded-xl overflow-hidden border transition-all duration-300 snap-start"
               style={{
-                borderColor: isActive ? accentAlpha(accent, 0.25) : "#1C2140",
-                background: isActive ? accentAlpha(accent, 0.08) : "#12162A",
+                borderColor: isActive ? accentAlpha(accent, 0.25) : PALETTE.panel2,
+                background: isActive ? accentAlpha(accent, 0.08) : PALETTE.panel,
                 transform: isActive ? "translateY(-2px)" : "translateY(0)",
               }}
             >
@@ -134,7 +139,7 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
                 />
                 <div
                   className="absolute inset-0 transition-opacity duration-300"
-                  style={{ background: isActive ? accentAlpha(accent, 0.08) : "rgba(5,7,15,0.45)" }}
+                  style={{ background: isActive ? accentAlpha(accent, 0.08) : `rgba(${RGB.ink},0.45)` }}
                 />
                 <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-lg bg-ink/70 backdrop-blur-md border border-panel2 flex items-center justify-center">
                   {isVideo ? <Video size={14} className="text-paper" /> : <ImageIcon size={14} className="text-paper" />}
@@ -150,7 +155,7 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
               <div className="px-3 py-2.5 text-left">
                 <span
                   className="font-mono text-[12px] font-medium"
-                  style={{ color: isActive ? "rgb(" + accent.rgb + ")" : "#98A2C4" }}
+                  style={{ color: isActive ? "rgb(" + accent.rgb + ")" : PALETTE.muted }}
                 >
                   {String(index + 1).padStart(2, "0")}
                 </span>
@@ -163,25 +168,15 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
   );
 }
 
-function ProjectPreview({ project, current, accent }) {
+function ProjectPreview({ project, current, accent, media, mediaIndex, onPrev, onNext }) {
+  const hasMultiple = media && media.length > 1;
+
   return (
     <div
       className="relative rounded-2xl overflow-hidden border"
-      style={{ borderColor: "#1C2140", background: "rgba(5,7,15,0.5)", boxShadow: "0 25px 70px -40px rgba(0,0,0,0.9)" }}
+      style={{ borderColor: PALETTE.panel2, background: `rgba(${RGB.ink},0.5)`, boxShadow: "0 25px 70px -40px rgba(0,0,0,0.9)" }}
     >
-      <div className="relative z-10 flex items-center gap-3 px-4 py-3 border-b" style={{ borderColor: "#1C2140", background: "#12162A" }}>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-panel2" />
-          <span className="w-2 h-2 rounded-full bg-panel2" />
-          <span className="w-2 h-2 rounded-full bg-panel2" />
-        </div>
-        <div className="flex-1 h-6 rounded-md bg-panel2/40 border border-panel2" />
-        <span className="hidden sm:block font-mono text-[11px] tracking-wide" style={{ color: accentAlpha(accent, 0.8) }}>
-          {project.domain}
-        </span>
-      </div>
-
-      <div className="relative bg-ink">
+      <div className="relative bg-ink group/preview">
         {current ? (
           current.type === "video" ? (
             <video key={current.src} src={current.src} poster={current.poster} controls playsInline className="block w-full aspect-video object-cover" />
@@ -197,11 +192,44 @@ function ProjectPreview({ project, current, accent }) {
           </div>
         )}
 
-        {project.media && project.media.length > 1 && (
+        <div className="absolute top-4 left-4 pointer-events-none">
+          <span
+            className="font-mono text-[11px] tracking-wide px-2.5 py-1.5 rounded-md"
+            style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.6)`, border: `1px solid ${PALETTE.panel2}` }}
+          >
+            {project.domain}
+          </span>
+        </div>
+
+
+        {hasMultiple && (
+          <>
+            <button
+              type="button"
+              onClick={onPrev}
+              aria-label="Media anterior"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center border backdrop-blur-md opacity-60 hover:opacity-100 transition-opacity duration-200"
+              style={{ background: `rgba(${RGB.ink},0.55)`, borderColor: PALETTE.panel2 }}
+            >
+              <ChevronLeft size={16} className="text-paper" />
+            </button>
+            <button
+              type="button"
+              onClick={onNext}
+              aria-label="Siguiente media"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center border backdrop-blur-md opacity-60 hover:opacity-100 transition-opacity duration-200"
+              style={{ background: `rgba(${RGB.ink},0.55)`, borderColor: PALETTE.panel2 }}
+            >
+              <ChevronRight size={16} className="text-paper" />
+            </button>
+          </>
+        )}
+
+        {hasMultiple && (
           <div className="absolute top-4 right-4 pointer-events-none">
             <div className="px-3 py-1.5 rounded-lg bg-ink/70 backdrop-blur-md border border-panel2">
-              <span className="font-mono text-[13px] tracking-wide" style={{ color: accentAlpha(accent, 0.95) }}>
-                {String(project.media.indexOf(current) + 1).padStart(2, "0")} / {String(project.media.length).padStart(2, "0")}
+              <span className="font-mono text-[13px] tracking-wide" style={{ color: PALETTE.accentLight }}>
+                {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
               </span>
             </div>
           </div>
@@ -228,6 +256,17 @@ export default function Projects() {
     return null;
   }
 
+  const goPrev = function () {
+    setMediaIndex(function (i) {
+      return (i - 1 + media.length) % media.length;
+    });
+  };
+  const goNext = function () {
+    setMediaIndex(function (i) {
+      return (i + 1) % media.length;
+    });
+  };
+
   return (
     <section id="proyectos" className="relative max-w-360 mx-auto px-6 md:px-10 py-28 md:py-32">
       <div className="relative">
@@ -237,7 +276,7 @@ export default function Projects() {
           <aside className="lg:sticky lg:top-28 h-fit">
             <div
               className="border border-panel2 rounded-2xl overflow-hidden"
-              style={{ background: "linear-gradient(180deg, rgba(28,33,64,0.6), rgba(18,22,42,0.4))" }}
+              style={{ background: `linear-gradient(180deg, rgba(${RGB.panel2},0.6), rgba(${RGB.panel},0.4))` }}
             >
               <div className="flex items-center gap-3 px-5 py-4 border-b border-panel2">
                 <Folder size={18} strokeWidth={1.7} className="text-paper" />
@@ -274,9 +313,34 @@ export default function Projects() {
               <span className="font-mono text-[12px] tracking-wide text-muted">{project.domain}</span>
             </div>
 
-            <div className="mb-8">
-              <h3 className="font-display text-2xl md:text-[30px] font-semibold tracking-tight text-paper">{project.title}</h3>
-              <p className="mt-2 font-mono text-[12px] text-muted">{project.domain}</p>
+    
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+              <div>
+                <h3 className="font-display text-2xl md:text-[30px] font-semibold tracking-tight text-paper">{project.title}</h3>
+                <p className="mt-2 font-mono text-[12px] text-muted">{project.domain}</p>
+              </div>
+
+              <div className="flex flex-wrap gap-2.5 shrink-0">
+                <a
+                  href={project.links.code}
+                  className="group flex items-center gap-2 font-mono text-[13px] text-paper border border-panel2 bg-panel rounded-lg px-4 py-2.5 transition-all duration-300 hover:bg-surface hover:border-accent-light/40"
+                >
+                  <FaGithub size={14} />
+                  <span>Código</span>
+                  <ArrowUpRight size={13} className="opacity-40 group-hover:opacity-100 transition-opacity" />
+                </a>
+
+                {project.links.demo && (
+                  <a
+                    href={project.links.demo}
+                    className="group flex items-center gap-2 font-mono text-[13px] text-paper border border-panel2 bg-panel rounded-lg px-4 py-2.5 transition-all duration-300 hover:bg-surface hover:border-accent-light/40"
+                  >
+                    <ExternalLink size={14} />
+                    <span>Ver demo</span>
+                    <ArrowUpRight size={13} className="opacity-40 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                )}
+              </div>
             </div>
 
             <div className="mb-10">
@@ -284,7 +348,15 @@ export default function Projects() {
                 <span className="font-mono text-[14px] tracking-[0.16em] uppercase text-paper">Project preview</span>
                 {media.length > 1 && <span className="font-mono text-[12px] text-muted">{media.length} media</span>}
               </div>
-              <ProjectPreview project={project} current={current} accent={accent} />
+              <ProjectPreview
+                project={project}
+                current={current}
+                accent={accent}
+                media={media}
+                mediaIndex={mediaIndex}
+                onPrev={goPrev}
+                onNext={goNext}
+              />
               <MediaSelector media={media} mediaIndex={mediaIndex} setMediaIndex={setMediaIndex} accent={accent} />
             </div>
 
@@ -319,28 +391,6 @@ export default function Projects() {
                   })}
                 </div>
               </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3 mt-2 pt-7 border-t border-panel2 pb-4">
-              <a
-                href={project.links.code}
-                className="group flex items-center gap-2.5 font-mono text-[12px] text-paper border border-panel2 bg-panel rounded-lg px-5 py-3 transition-all duration-300 hover:bg-surface hover:border-accent-light/40"
-              >
-                <FaGithub size={14} />
-                <span>Codigo</span>
-                <ArrowUpRight size={13} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-              </a>
-
-              {project.links.demo && (
-                <a
-                  href={project.links.demo}
-                  className="group flex items-center gap-2.5 font-mono text-[12px] text-paper border border-panel2 bg-panel rounded-lg px-5 py-3 transition-all duration-300 hover:bg-surface hover:border-accent-light/40"
-                >
-                  <ExternalLink size={14} />
-                  <span>Ver demo</span>
-                  <ArrowUpRight size={13} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                </a>
-              )}
             </div>
           </article>
         </div>
