@@ -19,10 +19,10 @@ export const experience = [
           "Automatice procesos de scraping y procesamiento de texto con Python y spaCy",
         ],
         stack: ["React Native", "Django REST Framework", "PostgreSQL", "Docker", "Python", "spaCy"],
+        // Foto de prueba real — el resto de proyectos de abajo se
+        // quedan en placeholder hasta que agregues sus imágenes.
         media: [
-          { type: "image", src: "https://placehold.co/1280x800/12162A/12162A", label: "Panel general" },
-          { type: "image", src: "https://placehold.co/1280x800/1C2140/1C2140", label: "Mapa de incidencias" },
-          { type: "image", src: "https://placehold.co/1280x800/262B52/262B52", label: "App movil" },
+          { type: "image", src: "/media/experience/inode-technology/home6.png", label: "Panel general" },
         ],
       },
       {
