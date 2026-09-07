@@ -8,8 +8,16 @@ export const projects = [
     demoLabel: "DEMO · 1:20",
 
     media: [
-      { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", poster: "https://placehold.co/800x450/12162A/EAF0FF?text=SmartHouse+AI" },
-      { type: "image", src: "https://placehold.co/800x450/1C2140/C7B8FF?text=Dashboard", label: "Dashboard" },
+      {
+        type: "video",
+        src: "/media/projects/SmartHouse/smarthouse-preview.mp4",
+        poster: "/media/experience/inode-technology/home6.png",
+      },
+      {
+        type: "image",
+        src: "/media/experience/inode-technology/home6.png",
+        label: "Workspace — Inicio",
+      },
       { type: "image", src: "https://placehold.co/800x450/1C2140/5EA8FF?text=Comparables", label: "Comparables" },
     ],
     did: [
@@ -32,6 +40,9 @@ export const projects = [
     title: "Refactor arquitectónico — Certificados clínicos",
     demoLabel: "DEMO · 2:05",
 
+    // Pendiente: aún en placeholder — no vi archivos tuyos para este
+    // proyecto todavía (solo existe la carpeta "pallet", que no sé si
+    // es este proyecto u otro — dime y ajusto la ruta).
     media: [
       { type: "image", src: "https://placehold.co/800x450/12162A/EAF0FF?text=Generacion+de+certificado", label: "Generación de certificado" },
       { type: "image", src: "https://placehold.co/800x450/1C2140/33D6A6?text=Panel+de+laboratorio", label: "Panel de laboratorio" },
