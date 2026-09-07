@@ -148,7 +148,7 @@ export default function Certifications() {
                   <span className={`font-mono text-[10.5px] rounded-full px-2 py-0.5 ${accent.pill}`}>
                     {group.items.length}
                   </span>
-                  <div className={`flex-1 h-px bg-gradient-to-r ${accent.line} via-white/10 to-transparent opacity-40`} />
+                  <div className={`flex-1 h-px bg-linear-to-r ${accent.line} via-white/10 to-transparent opacity-40`} />
                 </motion.div>
                 <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
                   {group.items.map((cert, i) => (
