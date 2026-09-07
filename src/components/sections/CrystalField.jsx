@@ -2,8 +2,8 @@ import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, MeshTransmissionMaterial, Environment } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { PALETTE } from "../../theme/palette";
 
-// Un cristal individual: geometría de octaedro con material tipo vidrio
 function Crystal({ position, scale, speed }) {
   const ref = useRef();
   useFrame((state) => {
@@ -21,14 +21,14 @@ function Crystal({ position, scale, speed }) {
           transmission={1}
           ior={1.4}
           chromaticAberration={0.03}
-          color="#8B5CF6"
+          color="#FFD000"
         />
       </mesh>
     </Float>
   );
 }
 
-// La cámara se inclina levemente hacia donde está el mouse — el "parallax"
+
 function CameraRig() {
   useFrame((state) => {
     const { mouse } = state;
@@ -40,7 +40,7 @@ function CameraRig() {
 }
 
 export default function CrystalField() {
-  // posiciones generadas una sola vez, no en cada render
+
   const crystals = useMemo(
     () =>
       Array.from({ length: 9 }, () => ({
@@ -72,7 +72,6 @@ export default function CrystalField() {
 
       <CameraRig />
 
-      {/* el glow real: post-procesado, no box-shadow */}
       <EffectComposer>
         <Bloom intensity={0.9} luminanceThreshold={0.15} mipmapBlur />
       </EffectComposer>
