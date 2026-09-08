@@ -11,14 +11,34 @@ export const projects = [
       {
         type: "video",
         src: "/media/projects/SmartHouse/smarthouse-preview.mp4",
-        poster: "/media/experience/inode-technology/home6.png",
+        poster: "/media/projects/SmartHouse/home2.png",
       },
       {
         type: "image",
-        src: "/media/experience/inode-technology/home6.png",
+        src: "/media/projects/SmartHouse/home1.png",
         label: "Workspace — Inicio",
       },
-      { type: "image", src: "https://placehold.co/800x450/1C2140/5EA8FF?text=Comparables", label: "Comparables" },
+      {
+        type: "image",
+        src: "/media/projects/SmartHouse/home2.png",
+        label: "Workspace — Inicio",
+      },
+      {
+        type: "image",
+        src: "/media/projects/SmartHouse/comparador.png",
+        label: "Workspace — Inicio",
+      },
+      {
+        type: "image",
+        src: "/media/projects/SmartHouse/calcular_precio.png",
+        label: "Workspace — Inicio",
+      },
+      {
+        type: "image",
+        src: "/media/projects/SmartHouse/busqueda_compardor.png",
+        label: "Workspace — Inicio",
+      },
+      // { type: "image", src: "https://placehold.co/800x450/1C2140/5EA8FF?text=Comparables", label: "Comparables" },
     ],
     did: [
       "Diseñé el sistema de diseño y los componentes del dashboard",

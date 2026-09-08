@@ -9,23 +9,15 @@ import {
   Building2,
   MapPin,
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import SectionHeader from "../ui/SectionHeader";
-import Chip from "../ui/Chip";
+import TechChip from "../ui/Techchip";
 import Modal from "../ui/Modal";
 import { experience } from "../../data/experience";
 import { ROTATION, accentAlpha } from "../../theme/tokens";
-
-/* =========================================================
-   SIGNAL RAIL
-
-   Reemplaza la linea vertical global (desalineada con el
-   grid asimetrico sidebar+contenido). Este rail vive DENTRO
-   del propio sidebar de cada compania, asi que nunca puede
-   quedar desalineado: es autocontenido y se anima con el
-   scroll de ese bloque especifico, no de toda la seccion.
-========================================================= */
 
 function SignalRail({ progress, accent }) {
   const glowY = useTransform(progress, [0, 1], ["-60%", "160%"]);
@@ -42,6 +34,26 @@ function SignalRail({ progress, accent }) {
         }}
       />
     </div>
+  );
+}
+
+/* Botón de flecha compartido — igual estilo que ya usamos en Proyectos */
+function NavArrow({ direction, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={function (e) {
+        e.stopPropagation();
+        onClick();
+      }}
+      aria-label={direction === "prev" ? "Media anterior" : "Siguiente media"}
+      className={
+        "absolute top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center border backdrop-blur-md opacity-60 hover:opacity-100 transition-opacity duration-200 bg-ink/55 border-panel2 " +
+        (direction === "prev" ? "left-3" : "right-3")
+      }
+    >
+      {direction === "prev" ? <ChevronLeft size={16} className="text-paper" /> : <ChevronRight size={16} className="text-paper" />}
+    </button>
   );
 }
 
@@ -92,58 +104,90 @@ function ProjectMedia({ media, accent, onOpen }) {
     );
   }
 
+  const hasMultiple = media.length > 1;
+  const goPrev = function () {
+    setSelected(function (i) {
+      return (i - 1 + media.length) % media.length;
+    });
+  };
+  const goNext = function () {
+    setSelected(function (i) {
+      return (i + 1) % media.length;
+    });
+  };
+
   return (
     <div className="space-y-3">
       <div
         ref={frameRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="relative aspect-16/10 will-change-transform"
+        className="relative w-full aspect-video rounded-xl overflow-hidden border border-panel2 bg-ink flex items-center justify-center will-change-transform"
         style={{ transformStyle: "preserve-3d", transition: "transform 450ms cubic-bezier(0.22,1,0.36,1)" }}
       >
+        {current.type === "video" ? (
+          <video
+            key={current.src}
+            src={current.src}
+            poster={current.poster}
+            controls
+            playsInline
+            className="w-full h-full object-contain"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={function () {
+              onOpen(current, media, selected);
+            }}
+            className="group relative flex items-center justify-center w-full h-full"
+          >
+            <img
+              key={current.src}
+              src={current.src}
+              alt={current.label || ""}
+              className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
+            />
+            <span
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(300px circle at var(--mx,50%) var(--my,50%), " +
+                  accentAlpha(accent, 0.08) +
+                  ", transparent 70%)",
+              }}
+            />
+          </button>
+        )}
+
+        {/* Botón Abrir — independiente del video, siempre visible (no
+            solo en hover). Antes vivía DENTRO del mismo botón que
+            capturaba el clic del video, así que reproducir y abrir el
+            modal quedaban mezclados. Ahora el video tiene sus propios
+            controles nativos (se reproduce ahí mismo, sin abrir nada),
+            y este botón es la única forma de abrir el modal. */}
         <button
           type="button"
           onClick={function () {
             onOpen(current, media, selected);
           }}
-          className="group relative block w-full h-full overflow-hidden rounded-xl border border-panel2 bg-ink text-left"
+          className="absolute top-3 left-3 z-20 flex items-center gap-2 px-3 py-2 rounded-md bg-ink/80 backdrop-blur-md border border-panel2 text-paper font-mono text-[12px] hover:border-accent-light/40 hover:bg-ink transition-colors"
         >
-          {current.type === "video" ? (
-            <video key={current.src} src={current.src} poster={current.poster} muted playsInline className="w-full h-full object-cover" />
-          ) : (
-            <img
-              key={current.src}
-              src={current.src}
-              alt={current.label || ""}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
-            />
-          )}
-
-          <span className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-
-          <span
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(300px circle at var(--mx,50%) var(--my,50%), " +
-                accentAlpha(accent, 0.08) +
-                ", transparent 70%)",
-            }}
-          />
-
-          {current.type === "video" && (
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="w-14 h-14 rounded-full flex items-center justify-center border border-panel2 bg-ink/70 backdrop-blur-md transition-transform duration-300 group-hover:scale-105">
-                <Play size={18} fill="currentColor" className="text-white ml-0.5" />
-              </span>
-            </span>
-          )}
-
-          <span className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-md bg-ink/70 backdrop-blur-md border border-panel2 text-paper/80 font-mono text-[11px] opacity-0 group-hover:opacity-100 transition-opacity">
-            <Maximize2 size={12} />
-            Abrir
-          </span>
+          <Maximize2 size={13} />
+          Abrir
         </button>
+
+        {hasMultiple && (
+          <>
+            <NavArrow direction="prev" onClick={goPrev} />
+            <NavArrow direction="next" onClick={goNext} />
+            <div className="absolute top-3 right-3 z-20 pointer-events-none">
+              <span className="font-mono text-[11px] px-2 py-1 rounded-md bg-ink/60 border border-panel2 text-paper/80">
+                {String(selected + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       {media.length > 1 && (
@@ -259,7 +303,7 @@ function ProjectBlock({ project, index, accent, onOpen }) {
 
             <div className="p-5 sm:p-7">
               <div className="mb-7">
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-paper/65">Contribution</span>
+                <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Contribution</span>
                 <ul className="mt-5 space-y-4">
                   {project.did &&
                     project.did.map(function (item, itemIndex) {
@@ -271,7 +315,7 @@ function ProjectBlock({ project, index, accent, onOpen }) {
                           >
                             <Check size={9} strokeWidth={3} className={accent.text} />
                           </span>
-                          <span className="text-[13px] leading-relaxed text-paper/72">{item}</span>
+                          <span className="text-[15px] leading-relaxed text-paper/85">{item}</span>
                         </li>
                       );
                     })}
@@ -280,10 +324,10 @@ function ProjectBlock({ project, index, accent, onOpen }) {
 
               {project.stack && project.stack.length > 0 && (
                 <div>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-paper/65">Built with</span>
+                  <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Built with</span>
                   <div className="flex flex-wrap gap-2 mt-4">
                     {project.stack.map(function (tech) {
-                      return <Chip key={tech}>{tech}</Chip>;
+                      return <TechChip key={tech} name={tech} />;
                     })}
                   </div>
                 </div>
@@ -333,9 +377,6 @@ function CompanyBlock({ job, index, accent }) {
           <h3 className="font-display text-2xl font-semibold text-paper tracking-tight">{job.company}</h3>
           <div className="mt-3 font-mono text-xs text-muted">{job.role}</div>
 
-          {/* SENAL ANIMADA: reemplaza la linea global desalineada.
-              Vive dentro de este sidebar, se anima con el scroll de
-              esta compania especifica - nunca puede desalinearse. */}
           <SignalRail progress={scrollYProgress} accent={accent} />
 
           <div className="mt-5 space-y-2.5">
@@ -415,6 +456,18 @@ function ExperienceMediaModal({ data, onClose }) {
 
   if (!current) return null;
 
+  const hasMultiple = media.length > 1;
+  const goPrev = function () {
+    setCurrentIndex(function (i) {
+      return (i - 1 + media.length) % media.length;
+    });
+  };
+  const goNext = function () {
+    setCurrentIndex(function (i) {
+      return (i + 1) % media.length;
+    });
+  };
+
   return (
     <Modal onClose={onClose}>
       <div className="w-full">
@@ -446,6 +499,15 @@ function ExperienceMediaModal({ data, onClose }) {
               alt={current.label || (project && project.title) || ""}
               className="block w-full max-h-[75vh] object-contain"
             />
+          )}
+
+          {/* Flechas para pasar a la siguiente imagen sin cerrar el modal
+              ni tener que usar solo las miniaturas de abajo. */}
+          {hasMultiple && (
+            <>
+              <NavArrow direction="prev" onClick={goPrev} />
+              <NavArrow direction="next" onClick={goNext} />
+            </>
           )}
         </div>
 
