@@ -1,10 +1,6 @@
 import { useState, useMemo } from "react";
+import { Code2 } from "lucide-react";
 
-// Mapa de nombre de tecnología (tal como aparece en tus data/*.js) a su
-// ícono. Reutiliza las mismas dos fuentes que ya usa Stack.jsx:
-// devicon (CDN de jsdelivr) y simple-icons (cdn.simpleicons.org).
-// Si una tecnología no está en el mapa, o el ícono falla al cargar,
-// el chip cae a texto solo — nunca rompe nada, solo no muestra logo.
 const TECH_ICON_MAP = {
   react: { devicon: "react" },
   "react native": { devicon: "react" },
@@ -83,11 +79,12 @@ export default function TechChip({ name }) {
   };
 
   return (
-    <span className="inline-flex items-center gap-2 font-mono text-[12px] text-paper border border-white/10 bg-white/[0.02] rounded-md pl-2 pr-3 py-1.5">
+    <span className="inline-flex items-center gap-2 font-mono text-[12px] text-paper border border-white/10 bg-white/3 rounded-md pl-2 pr-3 py-1.5">
       {src && !exhausted ? (
-        <img src={src} alt="" className="w-4 h-4 object-contain" onError={handleError} />
+        <img src={src} alt="" className="w-4 h-4 object-contain shrink-0" onError={handleError} />
       ) : (
-        <span className="w-1.5 h-1.5 rounded-full bg-muted/60" />
+     
+        <Code2 size={14} className="text-muted shrink-0" />
       )}
       {name}
     </span>
