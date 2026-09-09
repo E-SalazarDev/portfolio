@@ -1,4 +1,3 @@
-// src/components/sections/Experience.jsx
 import { useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
@@ -37,7 +36,6 @@ function SignalRail({ progress, accent }) {
   );
 }
 
-/* Botón de flecha compartido — igual estilo que ya usamos en Proyectos */
 function NavArrow({ direction, onClick }) {
   return (
     <button
@@ -160,12 +158,7 @@ function ProjectMedia({ media, accent, onOpen }) {
           </button>
         )}
 
-        {/* Botón Abrir — independiente del video, siempre visible (no
-            solo en hover). Antes vivía DENTRO del mismo botón que
-            capturaba el clic del video, así que reproducir y abrir el
-            modal quedaban mezclados. Ahora el video tiene sus propios
-            controles nativos (se reproduce ahí mismo, sin abrir nada),
-            y este botón es la única forma de abrir el modal. */}
+    
         <button
           type="button"
           onClick={function () {
@@ -291,10 +284,10 @@ function ProjectBlock({ project, index, accent, onOpen }) {
           <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-0 border-t border-panel2">
             <div className="p-5 sm:p-7 border-b lg:border-b-0 lg:border-r border-panel2">
               <div className="flex items-center justify-between mb-4">
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-paper/65">Evidence</span>
+                <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Evidencia</span>
                 {project.media && project.media.length > 0 && (
                   <span className="font-mono text-[10px] text-muted">
-                    {project.media.length} {project.media.length === 1 ? "asset" : "assets"}
+                    {project.media.length} {project.media.length === 1 ? "elemento" : "elementos"}
                   </span>
                 )}
               </div>
@@ -303,7 +296,7 @@ function ProjectBlock({ project, index, accent, onOpen }) {
 
             <div className="p-5 sm:p-7">
               <div className="mb-7">
-                <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Contribution</span>
+                <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Aportación</span>
                 <ul className="mt-5 space-y-4">
                   {project.did &&
                     project.did.map(function (item, itemIndex) {
@@ -324,7 +317,7 @@ function ProjectBlock({ project, index, accent, onOpen }) {
 
               {project.stack && project.stack.length > 0 && (
                 <div>
-                  <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Built with</span>
+                  <span className="font-mono text-[13px] uppercase tracking-[0.14em] text-paper/85 font-medium">Tecnologías</span>
                   <div className="flex flex-wrap gap-2 mt-4">
                     {project.stack.map(function (tech) {
                       return <TechChip key={tech} name={tech} />;
@@ -371,7 +364,7 @@ function CompanyBlock({ job, index, accent }) {
             >
               <Building2 size={17} className={accent.text} strokeWidth={1.6} />
             </div>
-            <span className="font-mono text-[11px] text-muted">EXPERIENCE {String(index + 1).padStart(2, "0")}</span>
+            <span className="font-mono text-[11px] text-muted">EXPERIENCIA {String(index + 1).padStart(2, "0")}</span>
           </div>
 
           <h3 className="font-display text-2xl font-semibold text-paper tracking-tight">{job.company}</h3>
@@ -395,12 +388,12 @@ function CompanyBlock({ job, index, accent }) {
           </div>
 
           <div className="mt-7 pt-5 border-t border-panel2">
-            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">Systems / projects</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted">Sistemas / proyectos</span>
             <div className="mt-2 flex items-baseline gap-2">
               <span className={"font-display text-3xl font-semibold " + accent.text}>
                 {String((job.projects && job.projects.length) || 0).padStart(2, "0")}
               </span>
-              <span className="font-mono text-[10px] text-muted">documented</span>
+              <span className="font-mono text-[10px] text-muted">documentados</span>
             </div>
           </div>
         </div>
@@ -408,7 +401,7 @@ function CompanyBlock({ job, index, accent }) {
         <div className="min-w-0">
           {job.description && (
             <div className="mb-10 max-w-3xl">
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Context</span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Contexto</span>
               <p className="mt-4 text-[15px] leading-7 text-paper/68">{job.description}</p>
             </div>
           )}
@@ -473,7 +466,7 @@ function ExperienceMediaModal({ data, onClose }) {
       <div className="w-full">
         <div className="flex items-center justify-between gap-4 mb-4">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">Project evidence</div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">Evidencia del proyecto</div>
             <h3 className="mt-1 font-display text-lg font-semibold text-paper">{project && project.title}</h3>
           </div>
           <div className="font-mono text-xs text-muted">
@@ -501,8 +494,6 @@ function ExperienceMediaModal({ data, onClose }) {
             />
           )}
 
-          {/* Flechas para pasar a la siguiente imagen sin cerrar el modal
-              ni tener que usar solo las miniaturas de abajo. */}
           {hasMultiple && (
             <>
               <NavArrow direction="prev" onClick={goPrev} />
