@@ -10,9 +10,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-
 import SectionHeader from "../ui/SectionHeader";
-import Chip from "../ui/Chip";
+import TechChip from "../ui/Techchip";
 import { projects } from "../../data/projects";
 import { ROTATION, accentAlpha } from "../../theme/tokens";
 import { PALETTE, RGB } from "../../theme/palette";
@@ -104,10 +103,10 @@ function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
   return (
     <div className="mt-5">
       <div className="flex items-center justify-between mb-4">
-        <span className="font-mono text-[13px] tracking-[0.16em] uppercase text-paper">Media</span>
+        <span className="font-mono text-[13px] tracking-[0.16em] uppercase text-paper">Multimedia</span>
         <span
-          className="font-mono text-[13px] tracking-wide px-2 py-1 rounded-md"
-          style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.4)` }}
+          className="font-mono text-[13px] font-semibold tracking-wide px-2.5 py-1.5 rounded-md"
+          style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.75)`, border: `1px solid ${PALETTE.panel2}` }}
         > {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
         </span>
       </div>
@@ -194,13 +193,12 @@ function ProjectPreview({ project, current, accent, media, mediaIndex, onPrev, o
 
         <div className="absolute top-4 left-4 pointer-events-none">
           <span
-            className="font-mono text-[11px] tracking-wide px-2.5 py-1.5 rounded-md"
-            style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.6)`, border: `1px solid ${PALETTE.panel2}` }}
+            className="font-mono text-[12px] font-semibold tracking-wide px-3 py-1.5 rounded-md"
+            style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.8)`, border: `1px solid ${PALETTE.panel2}` }}
           >
             {project.domain}
           </span>
         </div>
-
 
         {hasMultiple && (
           <>
@@ -227,8 +225,8 @@ function ProjectPreview({ project, current, accent, media, mediaIndex, onPrev, o
 
         {hasMultiple && (
           <div className="absolute top-4 right-4 pointer-events-none">
-            <div className="px-3 py-1.5 rounded-lg bg-ink/70 backdrop-blur-md border border-panel2">
-              <span className="font-mono text-[13px] tracking-wide" style={{ color: PALETTE.accentLight }}>
+            <div className="px-3 py-1.5 rounded-lg" style={{ background: `rgba(${RGB.ink},0.8)`, border: `1px solid ${PALETTE.panel2}` }}>
+              <span className="font-mono text-[13px] font-semibold tracking-wide" style={{ color: PALETTE.accentLight }}>
                 {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
               </span>
             </div>
@@ -301,7 +299,7 @@ export default function Projects() {
 
             <div className="hidden lg:flex items-center gap-3 mt-5 px-1">
               <span className="w-1.5 h-1.5 rounded-full" style={{ background: "rgb(" + accent.rgb + ")" }} />
-              <span className="font-mono text-[11px] tracking-wide text-muted">Selected project</span>
+              <span className="font-mono text-[11px] tracking-wide text-muted">Proyecto seleccionado</span>
             </div>
           </aside>
 
@@ -313,7 +311,6 @@ export default function Projects() {
               <span className="font-mono text-[12px] tracking-wide text-muted">{project.domain}</span>
             </div>
 
-    
             <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
               <div>
                 <h3 className="font-display text-2xl md:text-[30px] font-semibold tracking-tight text-paper">{project.title}</h3>
@@ -345,8 +342,8 @@ export default function Projects() {
 
             <div className="mb-10">
               <div className="flex items-center justify-between mb-4">
-                <span className="font-mono text-[14px] tracking-[0.16em] uppercase text-paper">Project preview</span>
-                {media.length > 1 && <span className="font-mono text-[12px] text-muted">{media.length} media</span>}
+                <span className="font-mono text-[14px] tracking-[0.16em] uppercase text-paper">Vista previa del proyecto</span>
+                {media.length > 1 && <span className="font-mono text-[12px] text-muted">{media.length} elementos</span>}
               </div>
               <ProjectPreview
                 project={project}
@@ -363,7 +360,7 @@ export default function Projects() {
             <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_250px] gap-10 pb-8">
               <div>
                 <div className="flex items-center gap-4 mb-5">
-                  <span className="font-mono text-[14px] tracking-[0.18em] uppercase text-paper whitespace-nowrap">Overview</span>
+                  <span className="font-mono text-[14px] tracking-[0.18em] uppercase text-paper whitespace-nowrap">Resumen</span>
                   <span className="h-px flex-1 bg-panel2" />
                 </div>
                 <ul className="space-y-4">
@@ -382,12 +379,12 @@ export default function Projects() {
 
               <div>
                 <div className="flex items-center gap-4 mb-5">
-                  <span className="font-mono text-[14px] tracking-[0.18em] uppercase text-paper whitespace-nowrap">Built with</span>
+                  <span className="font-mono text-[14px] tracking-[0.18em] uppercase text-paper whitespace-nowrap">Tecnologías</span>
                   <span className="h-px flex-1 bg-panel2" />
                 </div>
                 <div className="flex flex-wrap gap-2.5">
                   {project.stack.map(function (stackItem) {
-                    return <Chip key={stackItem}>{stackItem}</Chip>;
+                    return <TechChip key={stackItem} name={stackItem} />;
                   })}
                 </div>
               </div>
