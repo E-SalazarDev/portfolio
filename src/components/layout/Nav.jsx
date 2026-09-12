@@ -32,21 +32,67 @@ export default function Nav() {
         }`}
       >
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 sm:px-8 lg:px-12 py-4">
+          {/* LOGO + BRANDING */}
+          <a href="#inicio" className="group flex items-center gap-3 shrink-0">
+            {/* Contenedor del logo */}
+            <span className="relative flex items-center justify-center shrink-0 w-11 h-11">
+              {/* Halo exterior suave */}
+              <span
+                aria-hidden
+                className="absolute inset-0 rounded-full transition-all duration-500 group-hover:scale-110"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)",
+                  filter: "blur(8px)",
+                }}
+              />
 
-          <a
-            href="#inicio"
-            className="group flex items-center gap-2.5 shrink-0"
-          >
-            <span className="relative flex items-center justify-center w-8 h-8">
-              <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3B82F6] to-[#1E3A8A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="absolute w-3 h-3 rounded-[4px] bg-gradient-to-br from-[#93C5FD] to-[#3B82F6] rotate-45 shadow-[0_0_16px_2px_rgba(59,130,246,0.7)] transition-transform duration-500 group-hover:rotate-[135deg]" />
+              {/* Anillo giratorio al hover */}
+              <span
+                aria-hidden
+                className="absolute inset-0 rounded-full transition-transform duration-1000 group-hover:rotate-[360deg]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0%, rgba(147,197,253,0.5) 20%, transparent 40%, rgba(59,130,246,0.5) 60%, transparent 80%, rgba(147,197,253,0.5) 100%)",
+                }}
+              />
+
+              {/* Disco interior oscuro */}
+              <span
+                aria-hidden
+                className="absolute inset-[2px] rounded-full"
+                style={{ background: "#08090C" }}
+              />
+
+              {/* Logo */}
+              <img
+                src="/brand/logo.svg"
+                alt="Eduardo Salazar"
+                className="relative w-9 h-9 object-contain z-10 rounded-full transition-transform duration-500 group-hover:scale-105"
+                style={{
+                  boxShadow: "0 0 0 1px rgba(147,197,253,0.4)",
+                }}
+              />
+
+              {/* Punto verde online */}
+              <span
+                aria-hidden
+                className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-[#08090C] z-20"
+                style={{
+                  background: "#34D399",
+                  boxShadow: "0 0 6px rgba(52,211,153,0.9)",
+                }}
+              />
             </span>
-            <span className="text-[15px] font-bold tracking-[-0.02em] text-[#F5F6F7]">
+
+            {/* Texto */}
+            <span className="text-[15px] font-bold tracking-[-0.02em] text-[#F5F6F7] whitespace-nowrap">
               EDUARDO
               <span className="text-[#93C5FD]">.DEV</span>
             </span>
           </a>
 
+          {/* NAV CENTRAL */}
           <nav className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 px-1.5 py-1.5 rounded-full bg-white/3 border border-white/6 backdrop-blur-md">
             {LINKS.map((link) => {
               const isActive = active === link.id;
@@ -55,7 +101,9 @@ export default function Nav() {
                   key={link.id}
                   href={`#${link.id}`}
                   className={`relative px-4 py-2 text-[13.5px] font-medium tracking-[-0.01em] rounded-full transition-colors duration-200 ${
-                    isActive ? "text-[#08090C]" : "text-[#8B93A1] hover:text-[#F5F6F7]"
+                    isActive
+                      ? "text-[#08090C]"
+                      : "text-[#8B93A1] hover:text-[#F5F6F7]"
                   }`}
                 >
                   {isActive && (
@@ -67,6 +115,7 @@ export default function Nav() {
             })}
           </nav>
 
+          {/* ACCIONES DERECHA */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <a
               href="/cv.pdf"
@@ -87,6 +136,7 @@ export default function Nav() {
           </div>
         </div>
 
+        {/* BARRA DE PROGRESO */}
         <div className="relative h-px bg-white/4 overflow-hidden">
           <div
             className="absolute top-0 left-0 h-px bg-linear-to-r from-[#3B82F6] via-[#93C5FD] to-[#3B82F6] transition-[width] duration-150 ease-out"
