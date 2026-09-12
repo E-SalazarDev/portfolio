@@ -1,32 +1,24 @@
 import { useState, useEffect } from "react";
 import {
-  Folder,
   Play,
   ExternalLink,
   Image as ImageIcon,
   Video,
-  ArrowUpRight,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-import SectionHeader from "../ui/SectionHeader";
 import TechChip from "../ui/Techchip";
 import { projects } from "../../data/projects";
 import { ROTATION, accentAlpha } from "../../theme/tokens";
-import { PALETTE, RGB } from "../../theme/palette";
 
-const STATUS_STYLES = {
-  live: "bg-mint/10 text-mint",
-  build: "bg-amber/10 text-amber",
-  academic: "bg-mint/10 text-mint",
-};
-
-const STATUS_DOT = {
-  live: "bg-mint",
-  build: "bg-amber",
-  academic: "bg-mint",
-};
+function SectionLabel({ title }) {
+  return (
+    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#C4CAD4] mb-5">
+      {title}
+    </p>
+  );
+}
 
 function ProjectItem({ project, index, active, onClick }) {
   const accent = ROTATION[index % ROTATION.length];
@@ -35,170 +27,193 @@ function ProjectItem({ project, index, active, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="group relative w-full text-left px-5 py-5 transition-all duration-300"
+      className="group relative w-full text-left transition-all duration-300 overflow-hidden"
       style={{
         background: active
-          ? "linear-gradient(90deg, " + accentAlpha(accent, 0.09) + ", " + accentAlpha(accent, 0.02) + ")"
-          : "transparent",
+          ? "linear-gradient(135deg, rgba(37,99,235,0.2) 0%, rgba(30,58,138,0.06) 100%)"
+          : "linear-gradient(135deg, #1A1F2E 0%, #12161F 100%)",
+        border: active
+          ? "1px solid rgba(59,130,246,0.5)"
+          : "1px solid rgba(255,255,255,0.1)",
+        borderRadius: "16px",
+        padding: "16px 18px",
+        boxShadow: active
+          ? "0 20px 40px -20px rgba(59,130,246,0.65), inset 0 1px 0 0 rgba(255,255,255,0.1)"
+          : "0 4px 14px -8px rgba(0,0,0,0.6), inset 0 1px 0 0 rgba(255,255,255,0.04)",
+        transform: active ? "translateX(4px)" : "translateX(0)",
       }}
     >
-      <span
-        aria-hidden
-        className="absolute left-0 top-3 bottom-3 w-0.75 rounded-r-full transition-all duration-300"
-        style={{
-          background: active ? "rgb(" + accent.rgb + ")" : "transparent",
-          boxShadow: active ? "0 0 12px " + accentAlpha(accent, 0.35) : "none",
-        }}
-      />
-
-      <div className="flex items-start gap-4">
+      {active && (
         <span
-          className="font-mono text-sm pt-0.5 shrink-0 transition-colors duration-300"
-          style={{ color: active ? "rgb(" + accent.rgb + ")" : `rgba(${RGB.muted},0.55)` }}
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle at 90% -20%, rgba(59,130,246,0.3) 0%, transparent 55%)",
+          }}
+        />
+      )}
+
+      <div className="relative flex items-center gap-4">
+        <span
+          className="shrink-0 text-[34px] leading-none font-black tracking-[-0.05em] transition-all duration-300"
+          style={{
+            color: active ? "rgb(" + accent.rgb + ")" : "transparent",
+            WebkitTextStroke: active ? "0px" : "1.5px rgba(147,197,253,0.35)",
+            WebkitTextFillColor: active
+              ? "rgb(" + accent.rgb + ")"
+              : "transparent",
+            textShadow: active ? "0 0 20px " + accentAlpha(accent, 0.6) : "none",
+          }}
         >
           {String(index + 1).padStart(2, "0")}
         </span>
 
+        <span
+          className="shrink-0 self-stretch w-px transition-colors duration-300"
+          style={{
+            background: active
+              ? accentAlpha(accent, 0.4)
+              : "rgba(255,255,255,0.08)",
+          }}
+        />
+
         <div className="min-w-0 flex-1">
           <div
             className={
-              "font-display text-[16px] font-semibold leading-snug transition-colors duration-300 " +
-              (active ? "text-paper" : "text-muted group-hover:text-paper")
+              "text-[13.5px] font-semibold leading-tight tracking-[-0.01em] transition-colors duration-300 mb-1.5 " +
+              (active
+                ? "text-[#F5F6F7]"
+                : "text-[#C4CAD4] group-hover:text-[#F5F6F7]")
             }
           >
             {project.title}
           </div>
 
-          <div className="flex items-center gap-2 mt-2.5">
+          <div className="flex items-center gap-1.5">
+            <span
+              className="w-1 h-1 rounded-full shrink-0 transition-all duration-300"
+              style={{
+                background: active
+                  ? "rgb(" + accent.rgb + ")"
+                  : "rgba(139,147,161,0.55)",
+                boxShadow: active
+                  ? "0 0 6px " + accentAlpha(accent, 0.9)
+                  : "none",
+              }}
+            />
             <span
               className={
-                "w-1.5 h-1.5 rounded-full shrink-0 " +
-                (active ? STATUS_DOT[project.status] : "bg-panel2")
+                "text-[9.5px] uppercase font-semibold tracking-[0.14em] truncate transition-colors duration-300 " +
+                (active ? "text-[#93C5FD]" : "text-[#8B93A1]")
               }
-            />
-            <span className="font-mono text-[11px] tracking-wide text-muted">{project.domain}</span>
+            >
+              {project.domain}
+            </span>
           </div>
         </div>
-
-        <ArrowUpRight
-          size={16}
-          className={
-            "shrink-0 mt-1 transition-all duration-300 " +
-            (active
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-1 group-hover:opacity-60 group-hover:translate-x-0")
-          }
-          style={{ color: active ? "rgb(" + accent.rgb + ")" : undefined }}
-        />
       </div>
     </button>
   );
 }
 
-function MediaSelector({ media, mediaIndex, setMediaIndex, accent }) {
-  if (!media || media.length <= 1) {
-    return null;
-  }
+function MediaThumb({ item, index, isActive, accent, onClick }) {
+  const isVideo = item.type === "video";
 
   return (
-    <div className="mt-5">
-      <div className="flex items-center justify-between mb-4">
-        <span className="font-mono text-[13px] tracking-[0.16em] uppercase text-paper">Multimedia</span>
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative rounded-lg overflow-hidden transition-all duration-300 text-left w-full"
+      style={{
+        outline: isActive
+          ? "2px solid rgb(" + accent.rgb + ")"
+          : "1px solid rgba(255,255,255,0.08)",
+        outlineOffset: isActive ? "2px" : "0px",
+        transform: isActive ? "translateY(-2px)" : "translateY(0)",
+      }}
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-[#08090C]">
+        <img
+          src={isVideo ? item.poster : item.src}
+          alt={item.label || "Media " + (index + 1)}
+          className="w-full h-full object-cover transition-all duration-500"
+          style={{
+            opacity: isActive ? 1 : 0.6,
+            filter: isActive ? "brightness(1.05)" : "brightness(0.8)",
+          }}
+        />
+
         <span
-          className="font-mono text-[13px] font-semibold tracking-wide px-2.5 py-1.5 rounded-md"
-          style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.75)`, border: `1px solid ${PALETTE.panel2}` }}
-        > {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
+          className="absolute top-1.5 left-1.5 w-6 h-6 rounded-md flex items-center justify-center backdrop-blur-md"
+          style={{
+            background: "rgba(8,9,12,0.8)",
+            border: "1px solid rgba(255,255,255,0.15)",
+          }}
+        >
+          {isVideo ? (
+            <Video size={11} className="text-[#93C5FD]" />
+          ) : (
+            <ImageIcon size={11} className="text-[#93C5FD]" />
+          )}
         </span>
+
+        {isActive && (
+          <span
+            className="absolute inset-x-0 bottom-0 h-1 transition-all duration-300"
+            style={{
+              background: "rgb(" + accent.rgb + ")",
+              boxShadow: "0 -4px 12px " + accentAlpha(accent, 0.9),
+            }}
+          />
+        )}
       </div>
-
-      <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-panel2">
-        {media.map(function (item, index) {
-          const isActive = index === mediaIndex;
-          const isVideo = item.type === "video";
-
-          return (
-            <button
-              key={item.src + "-" + index}
-              type="button"
-              onClick={function () {
-                setMediaIndex(index);
-              }}
-              className="group relative shrink-0 w-32 sm:w-40 md:w-44 lg:w-48 rounded-xl overflow-hidden border transition-all duration-300 snap-start"
-              style={{
-                borderColor: isActive ? accentAlpha(accent, 0.25) : PALETTE.panel2,
-                background: isActive ? accentAlpha(accent, 0.08) : PALETTE.panel,
-                transform: isActive ? "translateY(-2px)" : "translateY(0)",
-              }}
-            >
-              <div className="relative aspect-16/10 overflow-hidden bg-ink">
-                <img
-                  src={isVideo ? item.poster : item.src}
-                  alt={item.label || "Media " + (index + 1)}
-                  className="w-full h-full object-cover opacity-65 group-hover:opacity-100 group-hover:scale-[1.025] transition-all duration-500"
-                />
-                <div
-                  className="absolute inset-0 transition-opacity duration-300"
-                  style={{ background: isActive ? accentAlpha(accent, 0.08) : `rgba(${RGB.ink},0.45)` }}
-                />
-                <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-lg bg-ink/70 backdrop-blur-md border border-panel2 flex items-center justify-center">
-                  {isVideo ? <Video size={14} className="text-paper" /> : <ImageIcon size={14} className="text-paper" />}
-                </span>
-                {isActive && (
-                  <span
-                    className="absolute right-2.5 top-2.5 w-2 h-2 rounded-full"
-                    style={{ background: "rgb(" + accent.rgb + ")", boxShadow: "0 0 7px " + accentAlpha(accent, 0.45) }}
-                  />
-                )}
-              </div>
-
-              <div className="px-3 py-2.5 text-left">
-                <span
-                  className="font-mono text-[12px] font-medium"
-                  style={{ color: isActive ? "rgb(" + accent.rgb + ")" : PALETTE.muted }}
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </div>
+    </button>
   );
 }
 
-function ProjectPreview({ project, current, accent, media, mediaIndex, onPrev, onNext }) {
+function ProjectPreview({ project, current, media, mediaIndex, onPrev, onNext }) {
   const hasMultiple = media && media.length > 1;
 
   return (
     <div
-      className="relative rounded-2xl overflow-hidden border"
-      style={{ borderColor: PALETTE.panel2, background: `rgba(${RGB.ink},0.5)`, boxShadow: "0 25px 70px -40px rgba(0,0,0,0.9)" }}
+      className="relative rounded-2xl overflow-hidden"
+      style={{
+        background: "#0E1219",
+        border: "1px solid rgba(255,255,255,0.1)",
+        boxShadow:
+          "0 40px 80px -40px rgba(0,0,0,0.95), 0 0 80px -30px rgba(59,130,246,0.25)",
+      }}
     >
-      <div className="relative bg-ink group/preview">
+      <div className="relative bg-[#08090C]">
         {current ? (
           current.type === "video" ? (
-            <video key={current.src} src={current.src} poster={current.poster} controls playsInline className="block w-full aspect-video object-cover" />
+            <video
+              key={current.src}
+              src={current.src}
+              poster={current.poster}
+              controls
+              playsInline
+              className="block w-full aspect-video object-cover"
+            />
           ) : (
-            <img key={current.src} src={current.src} alt={current.label || project.title} className="block w-full aspect-video object-cover" />
+            <img
+              key={current.src}
+              src={current.src}
+              alt={current.label || project.title}
+              className="block w-full aspect-video object-cover"
+            />
           )
         ) : (
           <div className="aspect-video flex items-center justify-center">
             <div className="text-center">
-              <Play size={28} className="mx-auto mb-3 text-muted" />
-              <span className="font-mono text-xs text-muted">{project.demoLabel}</span>
+              <Play size={28} className="mx-auto mb-3 text-[#8B93A1]" />
+              <span className="text-xs text-[#8B93A1]">
+                {project.demoLabel}
+              </span>
             </div>
           </div>
         )}
-
-        <div className="absolute top-4 left-4 pointer-events-none">
-          <span
-            className="font-mono text-[12px] font-semibold tracking-wide px-3 py-1.5 rounded-md"
-            style={{ color: PALETTE.accentLight, background: `rgba(${RGB.ink},0.8)`, border: `1px solid ${PALETTE.panel2}` }}
-          >
-            {project.domain}
-          </span>
-        </div>
 
         {hasMultiple && (
           <>
@@ -206,31 +221,37 @@ function ProjectPreview({ project, current, accent, media, mediaIndex, onPrev, o
               type="button"
               onClick={onPrev}
               aria-label="Media anterior"
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center border backdrop-blur-md opacity-60 hover:opacity-100 transition-opacity duration-200"
-              style={{ background: `rgba(${RGB.ink},0.55)`, borderColor: PALETTE.panel2 }}
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+              style={{
+                background: "rgba(245,246,247,0.95)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                boxShadow: "0 8px 24px -6px rgba(0,0,0,0.7)",
+              }}
             >
-              <ChevronLeft size={16} className="text-paper" />
+              <ChevronLeft
+                size={18}
+                className="text-[#08090C]"
+                strokeWidth={2.5}
+              />
             </button>
             <button
               type="button"
               onClick={onNext}
               aria-label="Siguiente media"
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center border backdrop-blur-md opacity-60 hover:opacity-100 transition-opacity duration-200"
-              style={{ background: `rgba(${RGB.ink},0.55)`, borderColor: PALETTE.panel2 }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+              style={{
+                background: "rgba(245,246,247,0.95)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                boxShadow: "0 8px 24px -6px rgba(0,0,0,0.7)",
+              }}
             >
-              <ChevronRight size={16} className="text-paper" />
+              <ChevronRight
+                size={18}
+                className="text-[#08090C]"
+                strokeWidth={2.5}
+              />
             </button>
           </>
-        )}
-
-        {hasMultiple && (
-          <div className="absolute top-4 right-4 pointer-events-none">
-            <div className="px-3 py-1.5 rounded-lg" style={{ background: `rgba(${RGB.ink},0.8)`, border: `1px solid ${PALETTE.panel2}` }}>
-              <span className="font-mono text-[13px] font-semibold tracking-wide" style={{ color: PALETTE.accentLight }}>
-                {String(mediaIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
-              </span>
-            </div>
-          </div>
         )}
       </div>
     </div>
@@ -246,13 +267,20 @@ export default function Projects() {
   const current = media[mediaIndex];
   const accent = ROTATION[active % ROTATION.length];
 
-  useEffect(function () {
-    setMediaIndex(0);
-  }, [active]);
+  useEffect(
+    function () {
+      setMediaIndex(0);
+    },
+    [active]
+  );
 
   if (!project) {
     return null;
   }
+
+  const hasCode = project.links && project.links.code;
+  const hasDemo = project.links && project.links.demo;
+  const hasAnyLink = hasCode || hasDemo;
 
   const goPrev = function () {
     setMediaIndex(function (i) {
@@ -266,131 +294,164 @@ export default function Projects() {
   };
 
   return (
-    <section id="proyectos" className="relative max-w-360 mx-auto px-6 md:px-10 py-28 md:py-32">
-      <div className="relative">
-        <SectionHeader tag="SYS.02" title="Proyectos" />
+    <section
+      id="proyectos"
+      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-16"
+    >
+      <div className="mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.025em] text-[#F5F6F7]">
+          Proyectos
+        </h2>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[290px_minmax(0,1fr)] gap-8 lg:gap-12 items-start">
-          <aside className="lg:sticky lg:top-28 h-fit">
-            <div
-              className="border border-panel2 rounded-2xl overflow-hidden"
-              style={{ background: `linear-gradient(180deg, rgba(${RGB.panel2},0.6), rgba(${RGB.panel},0.4))` }}
-            >
-              <div className="flex items-center gap-3 px-5 py-4 border-b border-panel2">
-                <Folder size={18} strokeWidth={1.7} className="text-paper" />
-                <span className="font-mono text-[14px] tracking-wide text-paper">proyectos/</span>
+      <div className="grid grid-cols-1 lg:grid-cols-[290px_minmax(0,1fr)] gap-6 lg:gap-7 items-start">
+        <aside className="lg:sticky lg:top-24 h-fit">
+          <div className="flex flex-col gap-2.5">
+            {projects.map(function (p, index) {
+              return (
+                <ProjectItem
+                  key={p.id}
+                  project={p}
+                  index={index}
+                  active={index === active}
+                  onClick={function () {
+                    setActive(index);
+                  }}
+                />
+              );
+            })}
+          </div>
+        </aside>
+
+        <article className="min-w-0">
+          <div className="mb-7 flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+            <div className="min-w-0">
+              <h3 className="text-2xl md:text-[32px] font-bold tracking-[-0.025em] text-[#F5F6F7] leading-[1.1] mb-3">
+                {project.title}
+              </h3>
+              <span
+                className="inline-flex items-center gap-1.5 text-[10.5px] font-semibold tracking-[0.1em] uppercase px-2.5 py-1 rounded-md"
+                style={{
+                  color: "rgb(" + accent.rgb + ")",
+                  background: accentAlpha(accent, 0.12),
+                  border: "1px solid " + accentAlpha(accent, 0.28),
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{
+                    background: "rgb(" + accent.rgb + ")",
+                    boxShadow: "0 0 6px " + accentAlpha(accent, 0.9),
+                  }}
+                />
+                {project.domain}
+              </span>
+            </div>
+
+            {hasAnyLink && (
+              <div className="flex flex-wrap gap-2.5 shrink-0">
+                {hasCode && (
+                  <a
+                    href={project.links.code}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative inline-flex items-center gap-2 h-10 px-4 rounded-full overflow-hidden bg-[#F5F6F7] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_12px_36px_-8px_rgba(147,197,253,0.55)]"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#3B82F6] to-[#93C5FD] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <FaGithub size={13} className="relative z-10 text-[#08090C]" />
+                    <span className="relative z-10 text-[12.5px] font-semibold tracking-[-0.01em] text-[#08090C]">
+                      Código
+                    </span>
+                  </a>
+                )}
+
+                {hasDemo && (
+                  <a
+                    href={project.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white/[0.06] border border-white/[0.12] backdrop-blur-md transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.2] hover:scale-[1.03]"
+                  >
+                    <ExternalLink size={13} className="text-[#F5F6F7]" />
+                    <span className="text-[12.5px] font-semibold tracking-[-0.01em] text-[#F5F6F7]">
+                      Ver demo
+                    </span>
+                  </a>
+                )}
               </div>
-              <div>
-                {projects.map(function (p, index) {
+            )}
+          </div>
+
+          <div className="mb-8">
+            <div className="mb-4">
+              <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#C4CAD4] whitespace-nowrap">
+                Vista previa
+              </span>
+            </div>
+
+            <ProjectPreview
+              project={project}
+              current={current}
+              media={media}
+              mediaIndex={mediaIndex}
+              onPrev={goPrev}
+              onNext={goNext}
+            />
+
+            {media.length > 1 && (
+              <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
+                {media.map(function (item, index) {
                   return (
-                    <ProjectItem
-                      key={p.id}
-                      project={p}
+                    <MediaThumb
+                      key={(item.src || item.poster) + "-" + index}
+                      item={item}
                       index={index}
-                      active={index === active}
+                      isActive={index === mediaIndex}
+                      accent={accent}
                       onClick={function () {
-                        setActive(index);
+                        setMediaIndex(index);
                       }}
                     />
                   );
                 })}
               </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_340px] gap-8 pb-6">
+            <div>
+              <SectionLabel title="Aportes clave" />
+
+              <ul className="flex flex-col gap-4">
+                {project.did.map(function (item, index) {
+                  return (
+                    <li key={index} className="flex items-start gap-3.5">
+                      <span
+                        className="shrink-0 text-[13px] font-bold pt-0.5 w-6"
+                        style={{ color: "rgb(" + accent.rgb + ")" }}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-[13.5px] text-[#D0D6E0] leading-relaxed">
+                        {item}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
-            <div className="hidden lg:flex items-center gap-3 mt-5 px-1">
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "rgb(" + accent.rgb + ")" }} />
-              <span className="font-mono text-[11px] tracking-wide text-muted">Proyecto seleccionado</span>
-            </div>
-          </aside>
+            <div>
+              <SectionLabel title="Tecnologías" />
 
-          <article className="min-w-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-5 overscroll-contain scrollbar-thin scrollbar-thumb-panel2 scrollbar-track-transparent">
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-5">
-              <span className={"font-mono text-[12px] tracking-wide rounded-full px-3 py-1.5 " + STATUS_STYLES[project.status]}>
-                {project.statusLabel}
-              </span>
-              <span className="font-mono text-[12px] tracking-wide text-muted">{project.domain}</span>
-            </div>
-
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
-              <div>
-                <h3 className="font-display text-2xl md:text-[30px] font-semibold tracking-tight text-paper">{project.title}</h3>
-                <p className="mt-2 font-mono text-[12px] text-muted">{project.domain}</p>
-              </div>
-
-              <div className="flex flex-wrap gap-2.5 shrink-0">
-                <a
-                  href={project.links.code}
-                  className="group flex items-center gap-2 font-mono text-[13px] text-paper border border-panel2 bg-panel rounded-lg px-4 py-2.5 transition-all duration-300 hover:bg-surface hover:border-accent-light/40"
-                >
-                  <FaGithub size={14} />
-                  <span>Código</span>
-                  <ArrowUpRight size={13} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                </a>
-
-                {project.links.demo && (
-                  <a
-                    href={project.links.demo}
-                    className="group flex items-center gap-2 font-mono text-[13px] text-paper border border-panel2 bg-panel rounded-lg px-4 py-2.5 transition-all duration-300 hover:bg-surface hover:border-accent-light/40"
-                  >
-                    <ExternalLink size={14} />
-                    <span>Ver demo</span>
-                    <ArrowUpRight size={13} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                  </a>
-                )}
+              <div className="flex flex-wrap gap-2">
+                {project.stack.map(function (stackItem) {
+                  return <TechChip key={stackItem} name={stackItem} />;
+                })}
               </div>
             </div>
-
-            <div className="mb-10">
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-mono text-[14px] tracking-[0.16em] uppercase text-paper">Vista previa del proyecto</span>
-                {media.length > 1 && <span className="font-mono text-[12px] text-muted">{media.length} elementos</span>}
-              </div>
-              <ProjectPreview
-                project={project}
-                current={current}
-                accent={accent}
-                media={media}
-                mediaIndex={mediaIndex}
-                onPrev={goPrev}
-                onNext={goNext}
-              />
-              <MediaSelector media={media} mediaIndex={mediaIndex} setMediaIndex={setMediaIndex} accent={accent} />
-            </div>
-
-            <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_250px] gap-10 pb-8">
-              <div>
-                <div className="flex items-center gap-4 mb-5">
-                  <span className="font-mono text-[14px] tracking-[0.18em] uppercase text-paper whitespace-nowrap">Resumen</span>
-                  <span className="h-px flex-1 bg-panel2" />
-                </div>
-                <ul className="space-y-4">
-                  {project.did.map(function (item, index) {
-                    return (
-                      <li key={index} className="flex gap-4 text-[14px] md:text-[15px] text-paper/80 leading-relaxed">
-                        <span className="font-mono text-[12px] pt-1.5 shrink-0" style={{ color: "rgb(" + accent.rgb + ")" }}>
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span>{item}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-4 mb-5">
-                  <span className="font-mono text-[14px] tracking-[0.18em] uppercase text-paper whitespace-nowrap">Tecnologías</span>
-                  <span className="h-px flex-1 bg-panel2" />
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {project.stack.map(function (stackItem) {
-                    return <TechChip key={stackItem} name={stackItem} />;
-                  })}
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
+          </div>
+        </article>
       </div>
     </section>
   );
