@@ -1,7 +1,7 @@
 export const projects = [
   {
     id: "smarthouse-ai",
-    status: "live", // 'live' | 'build' | 'academic'
+    status: "live",
     statusLabel: "LIVE",
     domain: "PROPTECH · ML",
     title: "SmartHouse AI",
@@ -38,7 +38,6 @@ export const projects = [
         src: "/media/projects/SmartHouse/busqueda_compardor.png",
         label: "Workspace — Inicio",
       },
-      // { type: "image", src: "https://placehold.co/800x450/1C2140/5EA8FF?text=Comparables", label: "Comparables" },
     ],
     did: [
       "Diseñé el sistema de diseño y los componentes del dashboard",
@@ -47,9 +46,9 @@ export const projects = [
     ],
     stack: ["React", "Design System", "Python", "ML"],
     links: {
-      code: "#",
-      demo: "#",
-      video: "#",
+      code: "https://github.com/E-SalazarDev/SmartHouse-AVM",
+      demo: "https://github.com/E-SalazarDev/SmartHouse-AVM",
+      video: "",
     },
   },
   {
@@ -60,9 +59,6 @@ export const projects = [
     title: "Refactor arquitectónico — Certificados clínicos",
     demoLabel: "DEMO · 2:05",
 
-    // Pendiente: aún en placeholder — no vi archivos tuyos para este
-    // proyecto todavía (solo existe la carpeta "pallet", que no sé si
-    // es este proyecto u otro — dime y ajusto la ruta).
     media: [
       { type: "image", src: "https://placehold.co/800x450/12162A/EAF0FF?text=Generacion+de+certificado", label: "Generación de certificado" },
       { type: "image", src: "https://placehold.co/800x450/1C2140/33D6A6?text=Panel+de+laboratorio", label: "Panel de laboratorio" },
@@ -74,9 +70,9 @@ export const projects = [
     ],
     stack: ["Java 17", "JavaFX", "Maven", "JasperReports"],
     links: {
-      code: "#",
-      demo: "#",
-      video: "#",
+      code: "",
+      demo: "",
+      video: "",
     },
   },
   {
@@ -97,9 +93,9 @@ export const projects = [
     ],
     stack: ["Python", "NLP", "Computer Vision"],
     links: {
-      code: "#",
-      demo: "#",
-      video: "#",
+      code: "",
+      demo: "",
+      video: "",
     },
   },
 ];
