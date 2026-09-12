@@ -23,72 +23,77 @@ export default function Nav() {
   }, []);
 
   return (
-    <div
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-panel/80 backdrop-blur-xl border-b border-panel2 shadow-[0_1px_0_0_rgba(255,255,255,0.04)]"
-          : "bg-transparent border-b border-transparent"
-      }`}
-    >
-      <div className="flex items-center justify-between px-10 py-4">
-        {/* Logo */}
-        <div className="flex items-center gap-2.5 font-display font-semibold text-sm tracking-wide text-paper">
-          <span className="relative flex items-center justify-center w-6 h-6">
-            <span className="absolute w-2 h-2 rounded-[3px] bg-accent rotate-45 shadow-[0_0_12px_2px] shadow-accent/60" />
-          </span>
-          <span>
-            EDUARDO<span className="text-accent-light">.DEV</span>
-          </span>
-        </div>
+    <header className="sticky top-0 z-50">
+      <div
+        className={`relative transition-all duration-500 ${
+          scrolled
+            ? "bg-[#08090C]/70 backdrop-blur-2xl border-b border-white/[0.06]"
+            : "bg-transparent border-b border-transparent"
+        }`}
+      >
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 sm:px-8 lg:px-12 py-4">
 
-    
-        <nav className="hidden md:flex items-center gap-0.5 text-[13px] p-1 rounded-full border border-panel2 bg-panel">
-          {LINKS.map((link) => (
+          <a
+            href="#inicio"
+            className="group flex items-center gap-2.5 shrink-0"
+          >
+            <span className="relative flex items-center justify-center w-8 h-8">
+              <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3B82F6] to-[#1E3A8A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="absolute w-3 h-3 rounded-[4px] bg-gradient-to-br from-[#93C5FD] to-[#3B82F6] rotate-45 shadow-[0_0_16px_2px_rgba(59,130,246,0.7)] transition-transform duration-500 group-hover:rotate-[135deg]" />
+            </span>
+            <span className="text-[15px] font-bold tracking-[-0.02em] text-[#F5F6F7]">
+              EDUARDO
+              <span className="text-[#93C5FD]">.DEV</span>
+            </span>
+          </a>
+
+          <nav className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 px-1.5 py-1.5 rounded-full bg-white/3 border border-white/6 backdrop-blur-md">
+            {LINKS.map((link) => {
+              const isActive = active === link.id;
+              return (
+                <a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  className={`relative px-4 py-2 text-[13.5px] font-medium tracking-[-0.01em] rounded-full transition-colors duration-200 ${
+                    isActive ? "text-[#08090C]" : "text-[#8B93A1] hover:text-[#F5F6F7]"
+                  }`}
+                >
+                  {isActive && (
+                    <span className="absolute inset-0 rounded-full bg-[#F5F6F7] shadow-[0_2px_12px_-2px_rgba(245,246,247,0.4)]" />
+                  )}
+                  <span className="relative z-10">{link.label}</span>
+                </a>
+              );
+            })}
+          </nav>
+
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <a
-              key={link.id}
-              href={`#${link.id}`}
-              className={`relative px-4 py-1.5 rounded-full font-medium transition-all duration-200 ${
-                active === link.id
-                  ? "text-paper bg-surface shadow-sm"
-                  : "text-muted hover:text-paper"
-              }`}
+              href="/cv.pdf"
+              className="hidden sm:inline-flex items-center justify-center h-10 px-5 text-[13.5px] font-semibold tracking-[-0.01em] text-[#F5F6F7] rounded-full bg-white/6 border border-white/12 backdrop-blur-md transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.2]"
             >
-              {link.label}
+              CV
             </a>
-          ))}
-        </nav>
 
-        {/* Acciones */}
-        <div className="flex items-center gap-3">
-          <a
-            href="/cv.pdf"
-            className="hidden sm:inline-flex items-center gap-1.5 font-body text-xs font-medium text-muted hover:text-paper rounded-full px-4 py-2.5 transition-colors"
-          >
-            CV
-          </a>
-          
-          <a
-            href="#contacto"
-            className="group relative font-body text-xs font-semibold text-ink bg-linear-to-r from-paper to-white rounded-full px-5 py-2.5 overflow-hidden transition-transform hover:scale-[1.03]"
-          >
-            <span className="relative z-10 group-hover:opacity-0 transition-opacity">
-              Contactar
-            </span>
-            <span className="absolute inset-0 bg-linear-to-r from-accent-light to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <span className="absolute inset-0 flex items-center justify-center text-ink opacity-0 group-hover:opacity-100 transition-opacity z-10">
-              Contactar
-            </span>
-          </a>
+            <a
+              href="#contacto"
+              className="group relative inline-flex items-center justify-center h-10 px-5 rounded-full overflow-hidden bg-[#F5F6F7] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_10px_30px_-8px_rgba(147,197,253,0.5)]"
+            >
+              <span className="absolute inset-0 bg-linear-to-r from-[#3B82F6] to-[#93C5FD] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative z-10 text-[13.5px] font-semibold tracking-[-0.01em] text-[#08090C]">
+                Contactar
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div className="relative h-px bg-white/4 overflow-hidden">
+          <div
+            className="absolute top-0 left-0 h-px bg-linear-to-r from-[#3B82F6] via-[#93C5FD] to-[#3B82F6] transition-[width] duration-150 ease-out"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
-
-      {/* barra de progreso de scroll */}
-      <div className="h-px bg-panel2 relative">
-        <div
-          className="absolute top-0 left-0 h-px bg-linear-to-r from-accent to-accent-light transition-[width] duration-150"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
+    </header>
   );
 }
