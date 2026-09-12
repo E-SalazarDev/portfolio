@@ -74,50 +74,6 @@ export const experience = [
     ],
   },
   {
-    id: "clicksoft",
-    company: "ClickSoft Mexico",
-    role: "Ingeniero de Software Full Stack",
-    period: "sept. 2023 — may. 2025",
-    location: "Remoto",
-    projects: [
-      {
-        id: "merma",
-        title: "Merma",
-        period: "",
-        description: "Sistema empresarial para administracion y control de procesos internos, bajo arquitectura MVC.",
-        did: [
-          "Desarrolle APIs REST con Spring Framework y seguridad con Spring Security",
-          "Integre la aplicacion con bases de datos Oracle",
-          "Construi el frontend con Angular y TypeScript",
-          "Valide servicios y endpoints con Postman",
-        ],
-        stack: ["Angular", "Spring Boot", "Spring Security", "Oracle", "TypeScript", "APIs REST"],
-        // Sin capturas reales de este proyecto — vacío a propósito,
-        // así muestra "Sin evidencia visual" en vez de un placeholder.
-        media: [],
-      },
-      {
-        id: "mexicanfy",
-        title: "Mexicanfy — E-commerce y Marketplace internacional",
-        period: "ene. 2025 — may. 2025",
-        description:
-          "Plataforma e-commerce para promover y comercializar productos mexicanos hacia mercados europeos: identidad web, portal de acceso y catalogo de productos.",
-        did: [
-          "Desarrolle la interfaz corporativa con diseno responsivo y navegacion multilenguaje",
-          "Construi el portal de acceso y navegacion principal de la plataforma",
-          "Implemente el modulo de catalogo con filtros dinamicos y busqueda de productos",
-          "Di mantenimiento a modulos administrativos y corregi errores en produccion",
-        ],
-        stack: ["Spring Boot", "Spring Security", "PostgreSQL", "Docker", "Linux", "JaCoCo", "Mockito", "Tailwind CSS", "APIs REST"],
-        media: [
-          { type: "image", src: "/media/experience/clickSoft/mxf1.jpg", label: "Panel general" },
-          { type: "image", src: "/media/experience/clickSoft/mxf2.jpg", label: "Panel general" },
-          { type: "image", src: "/media/experience/clickSoft/mxf3.jpg", label: "Panel general" },
-        ],
-      },
-    ],
-  },
-  {
     id: "poder-judicial-puebla",
     company: "Poder Judicial del Estado de Puebla",
     role: "Ingeniero de Software Full Stack",
@@ -143,6 +99,48 @@ export const experience = [
           { type: "image", src: "/media/experience/poder-judicial/pjp2.jpeg", label: "Panel general" },
           { type: "image", src: "/media/experience/poder-judicial/pjp3.jpeg", label: "Panel general" },
           { type: "image", src: "/media/experience/poder-judicial/pjp4.jpeg", label: "Panel general" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "clicksoft",
+    company: "ClickSoft Mexico",
+    role: "Ingeniero de Software Full Stack",
+    period: "sept. 2023 — may. 2025",
+    location: "Remoto",
+    projects: [
+      {
+        id: "merma",
+        title: "Merma",
+        period: "",
+        description: "Sistema empresarial para administracion y control de procesos internos, bajo arquitectura MVC.",
+        did: [
+          "Desarrolle APIs REST con Spring Framework y seguridad con Spring Security",
+          "Integre la aplicacion con bases de datos Oracle",
+          "Construi el frontend con Angular y TypeScript",
+          "Valide servicios y endpoints con Postman",
+        ],
+        stack: ["Angular", "Spring Boot", "Spring Security", "Oracle", "TypeScript", "APIs REST"],
+        media: [],
+      },
+      {
+        id: "mexicanfy",
+        title: "Mexicanfy — E-commerce y Marketplace internacional",
+        period: "ene. 2025 — may. 2025",
+        description:
+          "Plataforma e-commerce para promover y comercializar productos mexicanos hacia mercados europeos: identidad web, portal de acceso y catalogo de productos.",
+        did: [
+          "Desarrolle la interfaz corporativa con diseno responsivo y navegacion multilenguaje",
+          "Construi el portal de acceso y navegacion principal de la plataforma",
+          "Implemente el modulo de catalogo con filtros dinamicos y busqueda de productos",
+          "Di mantenimiento a modulos administrativos y correi errores en produccion",
+        ],
+        stack: ["Spring Boot", "Spring Security", "PostgreSQL", "Docker", "Linux", "JaCoCo", "Mockito", "Tailwind CSS", "APIs REST"],
+        media: [
+          { type: "image", src: "/media/experience/clickSoft/mxf1.jpg", label: "Panel general" },
+          { type: "image", src: "/media/experience/clickSoft/mxf2.jpg", label: "Panel general" },
+          { type: "image", src: "/media/experience/clickSoft/mxf3.jpg", label: "Panel general" },
         ],
       },
     ],
