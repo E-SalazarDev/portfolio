@@ -1,7 +1,22 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import HeroBackground3D from "./HeroBackground3D";
 
 export default function Hero() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  // Navegación suave cuando ya estamos en el home
+  const handleAnchorClick = (e, id) => {
+    if (isHome) {
+      e.preventDefault();
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  };
+
   return (
     <section
       id="inicio"
@@ -65,18 +80,22 @@ export default function Hero() {
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row gap-3">
-              <a
-                href="#proyectos"
+              {/* Ver proyectos → navega a /#proyectos */}
+              <Link
+                to="/#proyectos"
+                onClick={(e) => handleAnchorClick(e, "proyectos")}
                 className="group relative inline-flex items-center justify-center h-12 px-6 rounded-full overflow-hidden bg-[#F5F6F7] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_12px_36px_-8px_rgba(147,197,253,0.55)]"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-[#3B82F6] to-[#93C5FD] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <span className="relative z-10 text-[14px] font-semibold tracking-[-0.01em] text-[#08090C]">
                   Ver proyectos
                 </span>
-              </a>
+              </Link>
 
+              {/* Descargar CV → link real al PDF */}
               <a
-                href="#cv"
+                href="/cv.pdf"
+                download
                 className="group relative inline-flex items-center justify-center h-12 px-6 rounded-full bg-white/[0.06] border border-white/[0.12] backdrop-blur-md transition-all duration-300 hover:bg-white/[0.1] hover:border-white/[0.2] hover:scale-[1.03]"
               >
                 <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#F5F6F7]">

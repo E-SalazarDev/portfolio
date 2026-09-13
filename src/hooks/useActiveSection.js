@@ -1,25 +1,54 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-// Detecta qué sección está en el centro de la pantalla mientras se hace scroll
 export function useActiveSection(ids) {
-  const [active, setActive] = useState(ids[0]);
+  const [active, setActive] = useState(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
-    );
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
 
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+      // 1. Si estamos en la portada (arriba del todo), no marcamos nada
+      //    Calculamos si estamos dentro del Hero
+      const hero = document.getElementById("inicio");
+      if (hero) {
+        const heroBottom = hero.offsetTop + hero.offsetHeight;
+        // Si el scroll todavía no pasó del Hero, no marcamos nada
+        if (scrollY < heroBottom - viewportHeight * 0.4) {
+          setActive(null);
+          return;
+        }
+      }
 
-    return () => observer.disconnect();
+      // 2. Punto de referencia: el centro del viewport
+      const referencePoint = scrollY + viewportHeight * 0.4;
+
+      // 3. Encontrar la sección activa (la que contiene el punto de referencia)
+      let currentSection = null;
+
+      for (const id of ids) {
+        const element = document.getElementById(id);
+        if (!element) continue;
+
+        const sectionTop = element.offsetTop;
+        const sectionBottom = sectionTop + element.offsetHeight;
+
+        if (referencePoint >= sectionTop && referencePoint < sectionBottom) {
+          currentSection = id;
+          break;
+        }
+      }
+
+      setActive(currentSection);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, [ids]);
 
   return active;

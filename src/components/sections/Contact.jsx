@@ -93,27 +93,6 @@ export default function Contact() {
           </div>
         </div>
       </section>
-{/* 
-      <footer
-        className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 pb-10"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-      >
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <span className="relative flex items-center justify-center w-6 h-6">
-              <span className="absolute w-2 h-2 rounded-[3px] bg-gradient-to-br from-[#93C5FD] to-[#3B82F6] rotate-45" />
-            </span>
-            <span className="text-[13px] font-semibold tracking-tight text-[#F5F6F7]">
-              EDUARDO
-              <span className="text-[#93C5FD]">.DEV</span>
-            </span>
-          </div>
-
-          <p className="text-[12px] text-[#8B93A1] tracking-tight">
-            © 2026 J. Eduardo Salazar Tecuapacho — Tlaxcala, MX
-          </p>
-        </div>
-      </footer> */}
     </>
   );
 }

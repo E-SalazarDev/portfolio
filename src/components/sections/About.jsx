@@ -1,13 +1,25 @@
 import { MapPin, GraduationCap, Briefcase } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import IDBadge from "../ui/IDBadge";
 
 export default function About() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  const handleAnchorClick = (e, id) => {
+    if (isHome) {
+      e.preventDefault();
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  };
+
   return (
     <section id="sobre-mi" className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-24">
-
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-14 items-start">
         <div>
-
           <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#93C5FD] mb-5">
             Sobre mí
           </p>
@@ -90,8 +102,9 @@ export default function About() {
           </div>
 
           <div className="mt-10">
-            <a
-              href="#proyectos"
+            <Link
+              to="/#proyectos"
+              onClick={(e) => handleAnchorClick(e, "proyectos")}
               className="
                 group relative inline-flex items-center justify-center
                 h-12 px-7 rounded-full overflow-hidden
@@ -107,7 +120,7 @@ export default function About() {
               <span className="relative z-10 text-[14px] font-semibold tracking-[-0.01em] text-[#08090C]">
                 Ver proyectos
               </span>
-            </a>
+            </Link>
           </div>
         </div>
 
