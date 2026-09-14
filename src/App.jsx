@@ -10,20 +10,14 @@ import About from "./components/sections/About";
 import ProjectCatalog from "./pages/ProjectCatalog";
 import ProjectPage from "./pages/ProjectPage";
 
-/**
- * ScrollToHash
- * - Si la URL tiene hash (#seccion), hace scroll suave a ese id cuando cambia la ruta.
- * - Si no hay hash, sube al top de la página.
- * - Esto es lo que permite que "Volver a proyectos" o los links del Nav
- *   funcionen desde /proyectos/:id hacia /#proyectos, /#contacto, etc.
- */
+
 function ScrollToHash() {
   const { hash, pathname } = useLocation();
 
   useEffect(() => {
     if (hash) {
       const id = hash.replace("#", "");
-      // Esperamos un tick para que el DOM de la nueva ruta esté montado
+      
       const timeout = setTimeout(() => {
         const el = document.getElementById(id);
         if (el) {
@@ -32,7 +26,7 @@ function ScrollToHash() {
       }, 80);
       return () => clearTimeout(timeout);
     } else {
-      // Sin hash → al top
+   
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [hash, pathname]);
@@ -70,7 +64,7 @@ export default function App() {
           <Nav />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/proyectos" element={<ProjectCatalog />} />
+            {/* <Route path="/proyectos" element={<ProjectCatalog />} /> */}
             <Route path="/proyectos/:projectId" element={<ProjectPage />} />
           </Routes>
         </div>
