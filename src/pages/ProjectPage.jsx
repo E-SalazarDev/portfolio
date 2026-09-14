@@ -218,6 +218,11 @@ function Sidebar({ currentId }) {
    HERO
 ========================================================= */
 function Hero({ project }) {
+  // Detectamos si el "poster" es en realidad un video
+  const isVideo =
+    typeof project.posterImage === "string" &&
+    /\.(mp4|webm|mov|m4v)$/i.test(project.posterImage);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -235,11 +240,23 @@ function Hero({ project }) {
         }}
       >
         <div className="relative aspect-[16/7] sm:aspect-[16/7] lg:aspect-[16/6.5] group">
-          <img
-            src={project.posterImage}
-            alt={project.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
-          />
+          {isVideo ? (
+            <video
+              src={project.posterImage}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
+            />
+          ) : (
+            <img
+              src={project.posterImage}
+              alt={project.title}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
+            />
+          )}
 
           <div
             className="absolute inset-0 pointer-events-none"
@@ -629,7 +646,6 @@ function ProjectGallery({ project }) {
   }
 
   // 3 imágenes: 1 grande izquierda + 2 apiladas derecha
-  // La izquierda usa aspect-video (marca la altura), la derecha se reparte con grid-rows-2
   if (images.length === 3) {
     return (
       <motion.section
@@ -642,10 +658,8 @@ function ProjectGallery({ project }) {
         <SectionHeader title="Vista del proyecto" />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-4">
-          {/* Card grande: aspect-video define la altura de la fila */}
           <GalleryItem src={images[0]} aspect="video" />
 
-          {/* Columna derecha: dividimos la altura en 2 filas iguales */}
           <div
             className="grid grid-cols-1 gap-4"
             style={{ gridTemplateRows: "1fr 1fr" }}
@@ -693,8 +707,6 @@ function ProjectGallery({ project }) {
 
 /* =========================================================
    GALLERY ITEM
-   aspect="video" → aspect 16/9 (para grids normales)
-   aspect="fill"  → ocupa el 100% del contenedor padre
 ========================================================= */
 function GalleryItem({ src, aspect = "video" }) {
   const isFill = aspect === "fill";
@@ -749,6 +761,7 @@ function GalleryItem({ src, aspect = "video" }) {
 ========================================================= */
 function Impact({ project }) {
   const icons = [Zap, Target, TrendingUp, CheckCircle2];
+  const labels = ["Backend", "Machine Learning", "Data", "Integración"];
 
   return (
     <motion.section
@@ -759,13 +772,25 @@ function Impact({ project }) {
     >
       <SectionHeader
         title="Lo más importante que construí"
-        subtitle="Resultados tangibles y contribuciones clave del proyecto."
+        subtitle="Backend, Machine Learning y procesamiento de datos integrados en un solo sistema."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {project.impact.map((item, idx) => {
           const IconComponent = icons[idx % icons.length];
           const accent = IMPACT_ACCENTS[idx % IMPACT_ACCENTS.length];
+          const label = labels[idx % labels.length];
+
+          // Detecta formato "Título: descripción"
+          const hasPrefix = /^[^:]{2,80}:/.test(item);
+          let title = "";
+          let description = item;
+
+          if (hasPrefix) {
+            const [t, ...rest] = item.split(":");
+            title = t.trim();
+            description = rest.join(":").trim();
+          }
 
           return (
             <motion.div
@@ -774,13 +799,14 @@ function Impact({ project }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="group relative flex items-center gap-5 p-5 rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1"
+              className="group relative flex items-start gap-5 p-5 rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(20,26,42,0.6) 0%, rgba(15,20,35,0.6) 100%)",
                 border: `1px solid ${accent.color}25`,
               }}
             >
+              {/* Glow radial al hover */}
               <span
                 aria-hidden
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -789,6 +815,7 @@ function Impact({ project }) {
                 }}
               />
 
+              {/* Icono con acento */}
               <span
                 className="relative shrink-0 flex items-center justify-center w-14 h-14 rounded-2xl transition-transform duration-500 group-hover:scale-110"
                 style={{
@@ -804,9 +831,30 @@ function Impact({ project }) {
                 />
               </span>
 
-              <div className="relative min-w-0 flex-1">
-                <p className="text-[14.5px] leading-snug text-[#E4E8EE] font-medium">
-                  {item}
+              {/* Contenido */}
+              <div className="relative min-w-0 flex-1 pt-0.5">
+                {/* Tag de categoría */}
+                <span
+                  className="inline-flex items-center text-[9.5px] font-bold tracking-[0.14em] uppercase px-2 py-0.5 rounded mb-2"
+                  style={{
+                    color: accent.color,
+                    background: accent.bg,
+                    border: `1px solid ${accent.color}40`,
+                  }}
+                >
+                  {label}
+                </span>
+
+                {/* Título de la aportación */}
+                {title && (
+                  <p className="text-[15px] font-bold tracking-[-0.01em] text-[#F5F6F7] mb-1.5 leading-snug">
+                    {title}
+                  </p>
+                )}
+
+                {/* Descripción */}
+                <p className="text-[13px] leading-relaxed text-[#A2AAB8]">
+                  {description}
                 </p>
               </div>
             </motion.div>
@@ -825,7 +873,8 @@ export default function ProjectPage() {
   const project = PROJECTS_DATA[projectId];
 
   if (!project) {
-    return <Navigate to="/proyectos" replace />;
+    // Si el proyecto no existe → mandamos al home + sección proyectos
+    return <Navigate to="/#proyectos" replace />;
   }
 
   return (
@@ -833,8 +882,9 @@ export default function ProjectPage() {
       <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-4 lg:gap-6">
           <div className="flex flex-col w-full">
+            {/* Volver al catálogo del HOME (sección #proyectos) */}
             <Link
-              to="/proyectos"
+              to="/#proyectos"
               className="group inline-flex items-center gap-2.5 self-start mb-6 px-3 py-2 rounded-lg bg-white/[0.06] border border-white/[0.12] text-[12.5px] font-semibold text-[#C4CAD4] hover:text-[#F5F6F7] hover:bg-[#3B82F6]/15 hover:border-[#3B82F6]/50 transition-all duration-300 backdrop-blur-sm"
             >
               <ArrowLeft
