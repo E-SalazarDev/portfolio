@@ -1,6 +1,6 @@
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useScrollProgress } from "../../hooks/useScrollProgress";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -15,13 +15,12 @@ const LINKS = [
 
 /**
  * Fondo estático del Nav — sin animaciones ni SVG pesados.
- * Solo un gradiente sutil + un glow radial muy leve para dar profundidad.
- * Reemplaza al antiguo LiquidMetalBackground (que causaba lag).
+ * Memoizado: no depende de props/estado, así que no debe re-renderizarse
+ * cada vez que el Nav padre lo hace (hover, scroll, etc.).
  */
-function NavBackground() {
+const NavBackground = memo(function NavBackground() {
   return (
     <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* Base: gradiente horizontal sutil */}
       <div
         className="absolute inset-0"
         style={{
@@ -29,8 +28,6 @@ function NavBackground() {
             "linear-gradient(115deg, #070A12 0%, #0B0F1C 45%, #070A12 100%)",
         }}
       />
-
-      {/* Glow radial suave arriba-izquierda */}
       <div
         className="absolute inset-0"
         style={{
@@ -38,8 +35,6 @@ function NavBackground() {
             "radial-gradient(ellipse 60% 100% at 15% 50%, rgba(59,130,246,0.10) 0%, transparent 60%)",
         }}
       />
-
-      {/* Glow radial suave arriba-derecha */}
       <div
         className="absolute inset-0"
         style={{
@@ -47,8 +42,6 @@ function NavBackground() {
             "radial-gradient(ellipse 50% 100% at 85% 50%, rgba(139,92,246,0.08) 0%, transparent 60%)",
         }}
       />
-
-      {/* Línea inferior muy sutil con degradado azul */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px"
         style={{
@@ -58,34 +51,72 @@ function NavBackground() {
       />
     </div>
   );
+});
+
+/**
+ * Barra de progreso de scroll, aislada en su propio componente.
+ * useScrollProgress() se actualiza en casi cada frame de scroll — si viviera
+ * dentro de Nav(), forzaría un re-render de TODO el nav (links, indicador,
+ * refs) en cada tick. Aislada aquí, solo esta franja de 2px se re-renderiza.
+ */
+function ScrollProgressBar() {
+  const progress = useScrollProgress();
+  return (
+    <div className="relative h-[2px] overflow-hidden z-10">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 100%)",
+        }}
+      />
+      <div
+        className="absolute top-0 left-0 h-full"
+        style={{
+          width: `${progress}%`,
+          background:
+            "linear-gradient(90deg, #3B82F6 0%, #93C5FD 50%, #3B82F6 100%)",
+          boxShadow:
+            "0 0 12px rgba(59,130,246,0.7), 0 0 4px rgba(147,197,253,0.9)",
+        }}
+      />
+    </div>
+  );
 }
 
 export default function Nav() {
   const active = useActiveSection(LINKS.map((l) => l.id));
-  const progress = useScrollProgress();
   const [scrolled, setScrolled] = useState(false);
   const [hovered, setHovered] = useState(null);
   const location = useLocation();
 
   const linkRefs = useRef({});
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const [hoveredStyle, setHoveredStyle] = useState({ left: 0, width: 0 });
 
-  // ¿Estamos en el home?
   const isHome = location.pathname === "/";
 
-  // Ruta activa forzada para subrutas tipo /proyectos/:id
   const routeActive = useMemo(() => {
     if (location.pathname.startsWith("/proyectos")) return "proyectos";
     return null;
   }, [location.pathname]);
 
-  // Sección activa: en el home usamos scroll; fuera, la de la ruta.
   const activeSection = isHome ? active : routeActive;
 
+  // Scroll listener con passive + rAF: no bloquea el hilo de scroll del
+  // navegador y evita disparar setState más de una vez por frame.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 12);
+        ticking = false;
+      });
+    };
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -99,7 +130,19 @@ export default function Nav() {
     });
   }, [activeSection]);
 
-  // Navegación suave cuando ya estamos en el home
+  // Antes esto se leía inline en el JSX (linkRefs.current[hovered]?.offsetLeft)
+  // en CADA render del componente. Ahora se calcula solo cuando cambia
+  // `hovered`, y se guarda en estado — nada de lecturas de layout en render.
+  useEffect(() => {
+    if (!hovered) return;
+    const el = linkRefs.current[hovered];
+    if (!el) return;
+    setHoveredStyle({
+      left: el.offsetLeft,
+      width: el.offsetWidth,
+    });
+  }, [hovered]);
+
   const handleNavClick = (e, id) => {
     if (isHome) {
       e.preventDefault();
@@ -125,7 +168,6 @@ export default function Nav() {
           WebkitBackdropFilter: "blur(12px)",
         }}
       >
-        {/* Fondo estático (reemplaza al LiquidMetalBackground) */}
         <NavBackground />
 
         <div className="relative max-w-[1400px] mx-auto flex items-center justify-between px-6 sm:px-8 lg:px-12 py-4">
@@ -185,8 +227,8 @@ export default function Nav() {
               border: "1px solid rgba(255,255,255,0.08)",
               boxShadow:
                 "0 8px 32px -12px rgba(0,0,0,0.8), inset 0 1px 0 0 rgba(255,255,255,0.06)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
             }}
           >
             {activeSection && (
@@ -208,6 +250,7 @@ export default function Nav() {
                   background:
                     "radial-gradient(ellipse at center, rgba(147,197,253,0.35) 0%, rgba(59,130,246,0.15) 40%, transparent 75%)",
                   filter: "blur(8px)",
+                  willChange: "left, width",
                 }}
               />
             )}
@@ -232,24 +275,7 @@ export default function Nav() {
                     "linear-gradient(135deg, #F5F6F7 0%, #E8EBEF 60%, #DDE3EC 100%)",
                   boxShadow:
                     "0 4px 16px -4px rgba(245,246,247,0.5), 0 0 0 1px rgba(147,197,253,0.3), inset 0 1px 0 0 rgba(255,255,255,0.9)",
-                }}
-              />
-            )}
-
-            {activeSection && (
-              <motion.span
-                aria-hidden
-                className="absolute top-1.5 h-1/2 rounded-full pointer-events-none z-[2] overflow-hidden"
-                initial={false}
-                animate={{
-                  left: indicatorStyle.left,
-                  width: indicatorStyle.width,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 220,
-                  damping: 28,
-                  mass: 1,
+                  willChange: "left, width",
                 }}
               >
                 <span
@@ -257,6 +283,7 @@ export default function Nav() {
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, transparent 100%)",
+                    opacity: 0.5,
                   }}
                 />
               </motion.span>
@@ -268,8 +295,8 @@ export default function Nav() {
                 className="absolute top-1.5 bottom-1.5 rounded-full pointer-events-none z-0"
                 initial={false}
                 animate={{
-                  left: linkRefs.current[hovered]?.offsetLeft || 0,
-                  width: linkRefs.current[hovered]?.offsetWidth || 0,
+                  left: hoveredStyle.left,
+                  width: hoveredStyle.width,
                 }}
                 transition={{
                   type: "spring",
@@ -281,6 +308,7 @@ export default function Nav() {
                   background:
                     "radial-gradient(ellipse at center, rgba(147,197,253,0.25) 0%, rgba(59,130,246,0.1) 50%, transparent 80%)",
                   filter: "blur(6px)",
+                  willChange: "left, width",
                 }}
               />
             )}
@@ -336,27 +364,7 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Barra de progreso de scroll */}
-        <div className="relative h-[2px] overflow-hidden z-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.02) 100%)",
-            }}
-          />
-
-          <div
-            className="absolute top-0 left-0 h-full transition-[width] duration-200 ease-out"
-            style={{
-              width: `${progress}%`,
-              background:
-                "linear-gradient(90deg, #3B82F6 0%, #93C5FD 50%, #3B82F6 100%)",
-              boxShadow:
-                "0 0 12px rgba(59,130,246,0.7), 0 0 4px rgba(147,197,253,0.9)",
-            }}
-          />
-        </div>
+        <ScrollProgressBar />
       </div>
     </header>
   );
