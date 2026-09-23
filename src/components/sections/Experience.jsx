@@ -114,9 +114,6 @@ function ProjectMedia({ media, accent, onOpen }) {
           <p className="text-[13px] font-semibold text-[#F5F6F7] leading-tight">
             Sin evidencia visual
           </p>
-          <p className="text-[12px] text-[#A2AAB8] mt-0.5">
-            Documentado en código y pruebas.
-          </p>
         </div>
       </div>
     );
@@ -269,6 +266,37 @@ function ProjectMedia({ media, accent, onOpen }) {
 }
 
 function ProjectBlock({ project, accent, onOpen }) {
+  const TECH_KEYWORDS = [
+    "Spring Boot", "Spring Security", "Spring Framework",
+    "Django REST Framework", "Django", "Nest.js", "Prisma",
+    "React Native", "React", "Angular", "TypeScript",
+    "Python", "spaCy", "Twilio",
+    "PostgreSQL", "MySQL", "Oracle", "Keycloak",
+    "Docker", "Podman", "Linux",
+    "JUnit", "Mockito", "JaCoCo", "Azure DevOps",
+    "Material UI", "Tailwind CSS", "NativeWind",
+    "APIs REST", "JPA", "Postman",
+  ];
+
+  function highlightTech(text, accent) {
+    if (!text) return text;
+    const pattern = new RegExp("(" + TECH_KEYWORDS.join("|") + ")", "g");
+    const parts = text.split(pattern);
+
+    return parts.map(function (part, i) {
+      if (TECH_KEYWORDS.includes(part)) {
+        return (
+          <strong
+            key={i}
+            style={{ color: "rgb(" + accent.rgb + ")", fontWeight: 700 }}
+          >
+            {part}
+          </strong>
+        );
+      }
+      return <span key={i}>{part}</span>;
+    });
+  }
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
@@ -285,20 +313,14 @@ function ProjectBlock({ project, accent, onOpen }) {
         }}
       >
         <div className="px-6 sm:px-8 pt-7 pb-6">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-            <div className="min-w-0">
-              <h4 className="text-xl sm:text-2xl font-bold tracking-[-0.02em] text-[#F5F6F7]">
-                {project.title}
-              </h4>
-              {project.description && (
-                <p className="mt-2.5 max-w-2xl text-[14px] text-[#A2AAB8] leading-relaxed">
-                  {project.description}
-                </p>
-              )}
-            </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h4 className="text-xl sm:text-2xl font-bold tracking-[-0.02em] text-[#F5F6F7]">
+              {project.title}
+            </h4>
             {project.domain && (
               <span
-                className="text-[10.5px] font-semibold uppercase tracking-[0.14em] shrink-0 px-2.5 py-1 rounded-md"
+                className="text-[10.5px] font-semibold uppercase tracking-[0.14em] shrink-0 px-2.5 py-1 rounded-md self-start sm:self-auto"
                 style={{
                   color: "rgb(" + accent.rgb + ")",
                   background: accentAlpha(accent, 0.12),
@@ -309,6 +331,12 @@ function ProjectBlock({ project, accent, onOpen }) {
               </span>
             )}
           </div>
+
+          {project.description && (
+            <p className="text-[14px] text-[#A2AAB8] leading-relaxed max-w-none">
+              {project.description}
+            </p>
+          )}
         </div>
 
         <div
@@ -323,29 +351,27 @@ function ProjectBlock({ project, accent, onOpen }) {
           className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-0"
           style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <div
-            className="p-6 sm:p-8"
-            style={{ borderRight: "1px solid rgba(255,255,255,0.06)" }}
-          >
-            <SectionLabel title="Aportación" />
-            <ul className="flex flex-col gap-4">
+          <div className="p-6 sm:p-8">
+            <SectionLabel title="Contribución técnica" />
+
+            <div className="flex flex-col gap-4">
               {project.did &&
-                project.did.map(function (item, itemIndex) {
+                project.did.map(function (item, i) {
                   return (
-                    <li key={itemIndex} className="flex items-start gap-3.5">
-                      <span
-                        className="shrink-0 text-[13px] font-bold pt-0.5 w-6"
-                        style={{ color: "rgb(" + accent.rgb + ")" }}
-                      >
-                        {String(itemIndex + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-[13.5px] text-[#D0D6E0] leading-relaxed">
-                        {item}
-                      </span>
-                    </li>
+                    <div
+                      key={i}
+                      className="relative pl-4"
+                      style={{
+                        borderLeft: "2px solid " + accentAlpha(accent, 0.35),
+                      }}
+                    >
+                      <p className="text-[13.5px] text-[#D0D6E0] leading-relaxed">
+                        {highlightTech(item, accent)}
+                      </p>
+                    </div>
                   );
                 })}
-            </ul>
+            </div>
           </div>
 
           <div className="p-6 sm:p-8">
@@ -657,36 +683,44 @@ function ExperienceMediaModal({ data, onClose }) {
     </Modal>
   );
 }
-
 export default function Experience() {
   return (
     <section
       id="experiencia"
-      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-20"
+      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-24"
     >
-      <div className="relative">
-        <div className="mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.025em] text-[#F5F6F7]">
-            Experiencia
-          </h2>
-          <p className="mt-4 max-w-2xl text-[15px] leading-7 text-[#A2AAB8]">
-            Trayectoria construyendo sistemas reales, desde la arquitectura y
-            el backend hasta las interfaces y la integración de servicios.
-          </p>
-        </div>
+   <motion.div
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-80px" }}
+  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+  className="mb-16"
+>
+  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-[-0.035em] text-[#F5F6F7] leading-[1.05] mb-8">
+    Experiencia{" "}
+    <span className="bg-gradient-to-r from-[#93C5FD] via-[#3B82F6] to-[#A78BFA] bg-clip-text text-transparent">
+      Laboral
+    </span>
+  </h2>
+  <p className="text-[15px] leading-7 text-[#A2AAB8] max-w-3xl">
+    A lo largo de mi carrera he construido sistemas que resuelven problemas
+    reales: plataformas institucionales, herramientas fintech y aplicaciones
+    en tiempo real. Buscando constantemente nuevos retos que me hagan crecer
+    como ingeniero.
+  </p>
+</motion.div>
 
-        <div className="space-y-24">
-          {experience.map(function (job, index) {
-            return (
-              <CompanyBlock
-                key={job.id || index}
-                job={job}
-                index={index}
-                accent={ROTATION[index % ROTATION.length]}
-              />
-            );
-          })}
-        </div>
+      <div className="space-y-24">
+        {experience.map(function (job, index) {
+          return (
+            <CompanyBlock
+              key={job.id || index}
+              job={job}
+              index={index}
+              accent={ROTATION[index % ROTATION.length]}
+            />
+          );
+        })}
       </div>
     </section>
   );

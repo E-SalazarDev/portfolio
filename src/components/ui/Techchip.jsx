@@ -1,11 +1,21 @@
 import { useState, useMemo } from "react";
 import { Code2, FlaskConical, Globe } from "lucide-react";
 
+// ===== SVGs inline (Django, Prisma, Azure DevOps) =====
+const DJANGO_SVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M11.146 0h3.924v18.166c-2.013.382-3.491.535-5.096.535-4.791 0-7.288-2.166-7.288-6.32 0-4.002 2.65-6.6 6.759-6.6.637 0 1.121.05 1.7.203zm0 9.143a3.894 3.894 0 0 0-1.325-.204c-1.988 0-3.134 1.223-3.134 3.365 0 2.09 1.096 3.236 3.109 3.236.433 0 .79-.025 1.35-.102V9.142zM21.314 6.06v9.098c0 3.135-.229 4.638-.917 5.928-.637 1.236-1.477 2.013-3.21 2.879l-3.643-1.732c1.727-.815 2.566-1.53 3.104-2.634.561-1.135.74-2.465.74-5.936V6.06h3.926z"/></svg>`;
+
+const PRISMA_SVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M21.807 18.285 13.553.757a1.323 1.323 0 0 0-2.334-.046L1.424 13.138a1.324 1.324 0 0 0 .242 1.628l7.32 7.078a1.323 1.323 0 0 0 1.585.114l10.318-6.242a1.324 1.324 0 0 0 .918-1.431zM13.35 19.2l-6.994-6.77 7.822-10.36 7.052 14.955z"/></svg>`;
+
+const AZURE_DEVOPS_SVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M22 18L17 22L9 19V22L4.81 16.25L17.72 17.3V6.34L22 5.65V18M4.81 16.25V8.96L17.72 6.34L10.6 2V4.84L3.97 6.76L2 9.38V15.07L4.81 16.25Z"/></svg>`;
+
 const TECH_ICON_MAP = {
   react: { devicon: "react", brand: "react", color: "61DAFB" },
   "react native": { devicon: "react", brand: "react", color: "61DAFB" },
-  django: { devicon: "django", brand: "django", color: "0C4B33" },
-  "django rest framework": { devicon: "django", brand: "django", color: "0C4B33" },
+
+  // Django → SVG inline recoloreado
+  django: { svg: DJANGO_SVG, color: "44B78B" },
+  "django rest framework": { svg: DJANGO_SVG, color: "44B78B" },
+
   postgresql: { devicon: "postgresql", brand: "postgresql", color: "4169E1" },
   docker: { devicon: "docker", brand: "docker", color: "2496ED" },
   python: { devicon: "python", brand: "python", color: "3776AB" },
@@ -32,7 +42,10 @@ const TECH_ICON_MAP = {
   spacy: { brand: "spacy", color: "09A3D5" },
   podman: { devicon: "podman", brand: "podman", color: "892CA0" },
   linux: { devicon: "linux", brand: "linux", color: "FCC624" },
-  "azure devops": { brand: "azuredevops", color: "0078D7" },
+
+  // Azure DevOps → SVG inline recoloreado
+  "azure devops": { svg: AZURE_DEVOPS_SVG, color: "0078D7" },
+
   "tailwind css": { devicon: "tailwindcss", brand: "tailwindcss", color: "06B6D4" },
   tailwind: { devicon: "tailwindcss", brand: "tailwindcss", color: "06B6D4" },
   nativewind: { devicon: "tailwindcss", brand: "tailwindcss", color: "06B6D4" },
@@ -46,7 +59,7 @@ const TECH_ICON_MAP = {
   flask: { devicon: "flask", brand: "flask", color: "FFFFFF" },
   fastapi: { brand: "fastapi", color: "05998B" },
   mongodb: { devicon: "mongodb", brand: "mongodb", color: "47A248" },
-  mysql: { devicon: "mysql", brand: "mysql", color: "4479A1" },
+  mysql: { devicon: "mysql", brand: "mysql", color: "00758F" },
   redis: { devicon: "redis", brand: "redis", color: "DC382D" },
   numpy: { devicon: "numpy", brand: "numpy", color: "4DABCF" },
   pandas: { devicon: "pandas", brand: "pandas", color: "E70488" },
@@ -58,6 +71,12 @@ const TECH_ICON_MAP = {
   "deep learning": { fallback: "api" },
   nlp: { fallback: "api" },
   vision: { fallback: "api" },
+  nestjs: { devicon: "nestjs", brand: "nestjs", color: "E0234E" },
+  "nest.js": { devicon: "nestjs", brand: "nestjs", color: "E0234E" },
+  nest: { devicon: "nestjs", brand: "nestjs", color: "E0234E" },
+
+  // Prisma → SVG inline recoloreado
+  prisma: { svg: PRISMA_SVG, color: "A5B4FC" },
 };
 
 const FALLBACK_ICONS = {
@@ -104,14 +123,20 @@ export default function TechChip({ name }) {
     <span
       className="group inline-flex items-center gap-2.5 text-[13px] font-semibold tracking-tight pl-2 pr-3.5 py-2 rounded-xl transition-all duration-300 hover:-translate-y-0.5"
       style={{
-        background: "linear-gradient(135deg, #1F2536 0%, #141926 100%)",
-        border: "1px solid rgba(255,255,255,0.1)",
+        background: "linear-gradient(135deg, #2A3347 0%, #1A2130 100%)",
+        border: "1px solid rgba(255,255,255,0.16)",
         color: "#F5F6F7",
         boxShadow:
-          "0 4px 12px -6px rgba(0,0,0,0.7), inset 0 1px 0 0 rgba(255,255,255,0.05)",
+          "0 4px 12px -6px rgba(0,0,0,0.6), inset 0 1px 0 0 rgba(255,255,255,0.08)",
       }}
     >
-      {src && !exhausted ? (
+      {entry && entry.svg ? (
+        <span
+          className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center"
+          style={{ color: iconColor }}
+          dangerouslySetInnerHTML={{ __html: entry.svg }}
+        />
+      ) : src && !exhausted ? (
         <img
           src={src}
           alt=""

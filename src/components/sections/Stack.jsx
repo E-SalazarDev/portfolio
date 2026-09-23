@@ -6,6 +6,15 @@ const INLINE_ICONS = {
   oracle: Database,
 };
 
+// ===== SVGs inline para marcas sin CDN =====
+const INLINE_SVGS = {
+  azuredevops: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M22 18L17 22L9 19V22L4.81 16.25L17.72 17.3V6.34L22 5.65V18M4.81 16.25V8.96L17.72 6.34L10.6 2V4.84L3.97 6.76L2 9.38V15.07L4.81 16.25Z"/></svg>`,
+  django: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M11.146 0h3.924v18.166c-2.013.382-3.491.535-5.096.535-4.791 0-7.288-2.166-7.288-6.32 0-4.002 2.65-6.6 6.759-6.6.637 0 1.121.05 1.7.203zm0 9.143a3.894 3.894 0 0 0-1.325-.204c-1.988 0-3.134 1.223-3.134 3.365 0 2.09 1.096 3.236 3.109 3.236.433 0 .79-.025 1.35-.102V9.142zM21.314 6.06v9.098c0 3.135-.229 4.638-.917 5.928-.637 1.236-1.477 2.013-3.21 2.879l-3.643-1.732c1.727-.815 2.566-1.53 3.104-2.634.561-1.135.74-2.465.74-5.936V6.06h3.926z"/></svg>`,
+  prisma: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M21.807 18.285 13.553.757a1.323 1.323 0 0 0-2.334-.046L1.424 13.138a1.324 1.324 0 0 0 .242 1.628l7.32 7.078a1.323 1.323 0 0 0 1.585.114l10.318-6.242a1.324 1.324 0 0 0 .918-1.431zM13.35 19.2l-6.994-6.77 7.822-10.36 7.052 14.955z"/></svg>`,
+  mockito: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 7.75 6H4.25A8 8 0 0 1 12 4zm-8 10h.5v4.5H4V14zm2.25 0h.5v4.5h-.5V14zm2.25 0h.5v4.5h-.5V14zm2.25 0h.5v4.5h-.5V14zm2.25 0h.5v4.5h-.5V14zm2.25 0h.5v4.5h-.5V14zm2.25 0h.5v4.5H16V14z"/></svg>`,
+  bitbucket: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M.778 1.213a.768.768 0 0 0-.768.892l3.263 19.81c.084.5.515.868 1.022.873H19.95a.772.772 0 0 0 .77-.646l3.27-20.03a.768.768 0 0 0-.768-.891zM14.52 15.53H9.522L8.17 8.466h7.561z"/></svg>`,
+};
+
 const MAX_TILT = 10;
 
 const CATEGORY_ACCENTS = [
@@ -14,6 +23,9 @@ const CATEGORY_ACCENTS = [
   { text: "#FBBF24", bg: "rgba(251,191,36,0.12)", border: "rgba(251,191,36,0.3)", rgb: "251,191,36" },
   { text: "#A78BFA", bg: "rgba(167,139,250,0.12)", border: "rgba(167,139,250,0.3)", rgb: "167,139,250" },
   { text: "#F472B6", bg: "rgba(244,114,182,0.12)", border: "rgba(244,114,182,0.3)", rgb: "244,114,182" },
+  { text: "#22D3EE", bg: "rgba(34,211,238,0.12)", border: "rgba(34,211,238,0.3)", rgb: "34,211,238" },
+  { text: "#FB923C", bg: "rgba(251,146,60,0.12)", border: "rgba(251,146,60,0.3)", rgb: "251,146,60" },
+  { text: "#C084FC", bg: "rgba(192,132,252,0.12)", border: "rgba(192,132,252,0.3)", rgb: "192,132,252" },
 ];
 
 function buildSources(item) {
@@ -36,6 +48,7 @@ function StackItem({ item }) {
   const [attempt, setAttempt] = useState(0);
   const src = sources[attempt];
   const InlineIcon = item.inline ? INLINE_ICONS[item.inline] : null;
+  const inlineSvg = item.svg ? INLINE_SVGS[item.svg] : null;
   const cardRef = useRef(null);
 
   const handleError = () => {
@@ -91,7 +104,19 @@ function StackItem({ item }) {
         className="relative z-10 w-16 h-16 flex items-center justify-center"
         style={{ transform: "translateZ(20px)" }}
       >
-        {InlineIcon ? (
+        {inlineSvg ? (
+          <span
+            style={{
+              color,
+              width: `${2.75 * (item.scale || 1)}rem`,
+              height: `${2.75 * (item.scale || 1)}rem`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            dangerouslySetInnerHTML={{ __html: inlineSvg }}
+          />
+        ) : InlineIcon ? (
           <InlineIcon size={40 * (item.scale || 1)} style={{ color }} />
         ) : src && !exhausted ? (
           <img

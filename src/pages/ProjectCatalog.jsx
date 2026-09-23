@@ -240,17 +240,18 @@ export default function ProjectCatalog() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-16 max-w-3xl"
+        className="mb-16 max-w-4xl"
       >
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-[-0.035em] text-[#F5F6F7] leading-[1.05] mb-6">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-[-0.035em] text-[#F5F6F7] leading-[1.05] mb-8">
           Catálogo de{" "}
           <span className="bg-gradient-to-r from-[#93C5FD] via-[#3B82F6] to-[#A78BFA] bg-clip-text text-transparent">
             proyectos
           </span>
         </h1>
-        <p className="text-[15px] leading-7 text-[#A2AAB8] max-w-xl">
-          Una selección de plataformas, APIs y sistemas backend que he
-          desarrollado en sectores fintech, gobierno y e-commerce.
+        <p className="text-[15px] leading-7 text-[#A2AAB8] max-w-2xl">
+          Proyectos personales donde llevo ideas propias a producción: desde
+          aplicaciones completas hasta herramientas internas. Cada uno incluye
+          su contexto, decisiones técnicas y evidencia visual del resultado.
         </p>
       </motion.div>
 

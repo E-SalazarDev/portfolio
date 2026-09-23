@@ -302,6 +302,11 @@ export default function Projects() {
         <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.025em] text-[#F5F6F7]">
           Proyectos
         </h2>
+        <p className="mt-4 text-[15px] leading-7 text-[#A2AAB8] max-w-3xl">
+          Selección de proyectos construidos con distintas arquitecturas y
+          tecnologías. Cada uno incluye su contexto, aportes técnicos, stack
+          utilizado y evidencia visual del resultado final.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[290px_minmax(0,1fr)] gap-6 lg:gap-7 items-start">
