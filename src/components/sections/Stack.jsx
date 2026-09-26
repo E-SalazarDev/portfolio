@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
 import { Database } from "lucide-react";
 import { stack } from "../../data/stack";
 
@@ -151,39 +152,34 @@ function StackItem({ item }) {
   );
 }
 
-function CategoryHeader({ category, index, count }) {
+/* =========================================================
+   CATEGORY HEADER — Título con línea de separación
+   (sin numeraciones, tamaño equilibrado)
+========================================================= */
+function CategoryHeader({ category, index }) {
   const accent = CATEGORY_ACCENTS[index % CATEGORY_ACCENTS.length];
 
   return (
-    <div className="flex items-center gap-4 mb-6">
+    <div className="flex items-center gap-3 mb-6">
+      {/* Barra vertical luminosa */}
       <span
-        className="text-[11px] font-black tracking-[0.14em] shrink-0"
-        style={{ color: accent.text }}
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-
-      <div className="min-w-0">
-        <h3 className="text-[15px] font-bold tracking-[-0.01em] text-[#F5F6F7]">
-          {category}
-        </h3>
-      </div>
-
-      <span
-        className="shrink-0 text-[10.5px] font-semibold tracking-tight px-2 py-0.5 rounded-md"
+        className="w-[3px] h-5 rounded-full shrink-0"
         style={{
-          color: accent.text,
-          background: accent.bg,
-          border: `1px solid ${accent.border}`,
+          background: `linear-gradient(180deg, ${accent.text} 0%, transparent 100%)`,
+          boxShadow: `0 0 10px ${accent.text}80`,
         }}
-      >
-        {count}
-      </span>
+      />
 
+      {/* Título de la categoría — tamaño medio */}
+      <h3 className="text-lg md:text-xl font-bold tracking-[-0.01em] text-[#F5F6F7] shrink-0 leading-tight">
+        {category}
+      </h3>
+
+      {/* Línea horizontal que se extiende */}
       <span
-        className="h-px flex-1 opacity-40"
+        className="h-px flex-1"
         style={{
-          background: `linear-gradient(90deg, ${accent.text} 0%, transparent 100%)`,
+          background: `linear-gradient(90deg, ${accent.border} 0%, transparent 100%)`,
         }}
       />
     </div>
@@ -194,26 +190,35 @@ export default function Stack() {
   return (
     <section
       id="stack"
-      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-20"
+      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-24"
     >
       <div className="relative">
-        <div className="mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.025em] text-[#F5F6F7]">
-            Stack
+        {/* HEADER principal — idéntico al de Experience y Certifications */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-[-0.035em] text-[#F5F6F7] leading-[1.05] mb-8">
+            Stack{" "}
+            <span className="bg-gradient-to-r from-[#93C5FD] via-[#3B82F6] to-[#A78BFA] bg-clip-text text-transparent">
+              técnico
+            </span>
           </h2>
-          <p className="mt-4 max-w-2xl text-[15px] leading-7 text-[#A2AAB8]">
+          <p className="text-[15px] leading-7 text-[#A2AAB8] max-w-3xl">
             Tecnologías y herramientas que uso para construir productos
             backend, frontend y sistemas de inteligencia artificial.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-16">
           {stack.map((group, groupIndex) => (
             <div key={group.category}>
               <CategoryHeader
                 category={group.category}
                 index={groupIndex}
-                count={group.items.length}
               />
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
                 {group.items.map((item) => (

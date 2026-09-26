@@ -78,7 +78,6 @@ export const stack = [
     items: [
       { name: "Git", brand: "git", color: "F05032", scale: 1.7 },
       { name: "GitHub", brand: "github", color: "FFFFFF", scale: 1.7 },
-      { name: "GitLab", brand: "gitlab", color: "FC6D26", scale: 1.7 },
       { name: "Maven", brand: "apachemaven", color: "C71A36", scale: 1.7 },
     ],
   },

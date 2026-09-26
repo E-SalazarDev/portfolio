@@ -126,39 +126,66 @@ export default function Certifications() {
   return (
     <section
       id="certificaciones"
-      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-20"
+      className="relative max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-24"
       style={{ perspective: "1200px" }}
     >
       <div className="relative">
-        <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.025em] text-[#F5F6F7]">
-            Certificaciones
+        {/* HEADER — idéntico al de Experience y Stack */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-[-0.035em] text-[#F5F6F7] leading-[1.05] mb-8">
+            Certificaciones{" "}
+            <span className="bg-gradient-to-r from-[#93C5FD] via-[#3B82F6] to-[#A78BFA] bg-clip-text text-transparent">
+              técnicas
+            </span>
           </h2>
-          <p className="mt-4 max-w-2xl text-[15px] leading-7 text-[#8B93A1]">
+          <p className="text-[15px] leading-7 text-[#A2AAB8] max-w-3xl">
             Certificaciones técnicas y cursos completados en inteligencia
             artificial, machine learning y desarrollo de software.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-14">
           {groups.map((group, gi) => {
             const accent = ACCENTS[gi % ACCENTS.length];
             return (
               <div key={group.issuer}>
+                {/* HEADER del issuer */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex items-center gap-2.5 mb-4"
+                  className="flex items-center gap-3 mb-5"
                 >
-                  <h3 className="text-[15px] font-bold tracking-[-0.01em] text-[#F5F6F7]">
+                  {/* Barra vertical luminosa */}
+                  <span
+                    className="w-[3px] h-5 rounded-full shrink-0"
+                    style={{
+                      background: `linear-gradient(180deg, ${accent.rgb ? `rgb(${accent.rgb})` : "#93C5FD"} 0%, transparent 100%)`,
+                      boxShadow: `0 0 10px rgba(${accent.rgb},0.5)`,
+                    }}
+                  />
+
+                  {/* Nombre del issuer con tamaño equilibrado */}
+                  <h3 className="text-lg md:text-xl font-bold tracking-[-0.01em] text-[#F5F6F7] shrink-0 leading-tight">
                     {group.issuer}
                   </h3>
-                  <span className={`text-[10.5px] font-bold rounded-full px-2 py-0.5 ${accent.pill}`}>
-                    {group.items.length}
-                  </span>
+
+                  {/* Línea horizontal que se extiende */}
+                  <span
+                    className="h-px flex-1"
+                    style={{
+                      background: `linear-gradient(90deg, rgba(${accent.rgb},0.3) 0%, transparent 100%)`,
+                    }}
+                  />
                 </motion.div>
+
                 <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
                   {group.items.map((cert, i) => (
                     <CertCard key={cert.id} cert={cert} accent={accent} index={i} onOpen={setOpenCert} />
